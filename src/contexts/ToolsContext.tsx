@@ -14,6 +14,7 @@ export const ToolsProvider = ({ children }: any) => {
 				selectedTool,
 				tools,
 				setSelectedTool,
+				setTools,
 			}}
 		>
 			{children}

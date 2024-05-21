@@ -34,6 +34,7 @@ export type ToolsContextType = {
 	selectedTool: Tool | null;
 	tools: Tool[];
 	setSelectedTool: (tool: Tool | null) => void;
+	setTools: (tools: Tool[]) => void;
 };
 
 export type ProfileContextType = {
