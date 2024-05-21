@@ -15,6 +15,7 @@
 - [x] Generate tables with 2+ comodins and his custom positions
 - [x] Add a way to generate multiple tables at the same time (no overlapping id)
 - [x] Add a way to delete all the tables
+- [ ] Add a way to undo the remove of the tables in the toast and ctrl+z if is possible
 - [ ] Manage all actions with toasts (in progress)
 - [x] Switch tools of the toolbar
 - [x] A way to edit the figures of the table in real time
