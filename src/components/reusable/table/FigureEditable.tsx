@@ -65,7 +65,7 @@ export const FigureEditable = ({
 									const newFigures = currentTable.options.figures.flat();
 
 									const copyOfCurrentFigure = currentFigure;
-									const copyOfSelectedFigure = selectedFigure.figure;
+									// const copyOfSelectedFigure = selectedFigure.figure;
 
 									newFigures[index] = selectedFigure.figure;
 									newFigures[selectedFigure.index] = copyOfCurrentFigure;

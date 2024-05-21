@@ -1,11 +1,8 @@
 import {
-	MoreHorizontalIcon,
 	MoreVerticalIcon,
-	Plus,
 	PlusIcon,
 	PrinterIcon,
 	SendIcon,
-	Settings2Icon,
 	SettingsIcon,
 } from "lucide-react";
 
