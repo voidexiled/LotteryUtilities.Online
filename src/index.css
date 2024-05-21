@@ -1,0 +1,29 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.figtree-font {
+  font-family: "Figtree", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+}
+
+:root {
+  font-family: "Figtree", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased; /* Webkit-based browsers (Chrome, Safari) */
+    -moz-osx-font-smoothing: grayscale; /* Firefox */
+    font-smooth: always; /* Other browsers */
+}
+
+
+
+
+.btn {
+}
