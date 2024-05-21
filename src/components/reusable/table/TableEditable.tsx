@@ -1,11 +1,11 @@
+import { TablesContext } from "@/contexts/TablesContext";
 import { cn } from "@/utils/utils";
-import type { Figure, FiguresContextType, TablesContextType } from "@/vite-env";
+import type { Figure, TablesContextType } from "@/vite-env";
+import { motion } from "framer-motion";
 import { useContext, useEffect, useState } from "react";
 import { FigureEditable } from "./FigureEditable";
-import { TablesContext } from "@/contexts/TablesContext";
-import { motion } from "framer-motion";
 export const TableEditable = () => {
-	const { updateTable, tables, currentTable } = useContext(
+	const { updateTable, currentTable } = useContext(
 		TablesContext,
 	) as TablesContextType;
 	const [selectedFigure, setSelectedFigure] = useState<{
@@ -41,7 +41,6 @@ export const TableEditable = () => {
 						<FigureEditable
 							key={index}
 							index={index}
-							tables={tables}
 							currentTable={currentTable}
 							currentFigure={figure}
 							tableSize={size}

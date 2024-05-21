@@ -1,10 +1,9 @@
 import { cn, getURLImage } from "@/utils/utils";
 import type { Figure, Table, TablesContextType } from "@/vite-env";
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 type FigureEditableProps = {
 	index: number;
-	tables: TablesContextType["tables"];
 	currentTable: TablesContextType["currentTable"];
 	currentFigure: Figure;
 	tableSize: number;
@@ -15,7 +14,6 @@ type FigureEditableProps = {
 
 export const FigureEditable = ({
 	index,
-	tables,
 	tableSize,
 	currentTable,
 	currentFigure,

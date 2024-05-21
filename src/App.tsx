@@ -1,7 +1,6 @@
 import "./App.css";
 import { Header } from "@/components/core/Header";
 import { MainComponent } from "./components/core/MainComponent";
-import { ToastContainer } from "react-toastify";
 
 function App() {
 	// try to load figures from local storage if available

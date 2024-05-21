@@ -8,15 +8,15 @@ import type {
 	Table,
 	TablesContextType,
 } from "@/vite-env";
-import { Check, CheckIcon, Trash2, Trash2Icon } from "lucide-react";
+import { CheckIcon, Trash2Icon } from "lucide-react";
 import { useContext, useRef, useState } from "react";
 import { type Id, toast } from "react-toastify";
 
 export const RightBarProfileViewer = () => {
 	const { profile } = useContext(ProfileContext) as ProfileContextType;
-	const { tables, addTable, setCurrentTable } = useContext(
-		TablesContext,
-	) as TablesContextType;
+	// const { tables, addTable, setCurrentTable } = useContext(
+	// 	TablesContext,
+	// ) as TablesContextType;
 	const { emptyTables, addTables } = useContext(
 		TablesContext,
 	) as TablesContextType;
@@ -25,7 +25,7 @@ export const RightBarProfileViewer = () => {
 	const [generatingTable, setGeneratingTable] = useState(false);
 	const toastId = useRef<Id | null>(null);
 
-	const notifyAddedAsync = (totalTables: number) => {
+	const notifyAddedAsync = () => {
 		toastId.current = toast("Generando tablas...", {
 			bodyStyle: { fontSize: "0.75rem" },
 			progress: 0,
@@ -42,14 +42,7 @@ export const RightBarProfileViewer = () => {
 		});
 
 	const handleGenerateTable = async (): Promise<Table | undefined> => {
-		const newTable = await generateRandomTable(
-			profile,
-			tables,
-			figures,
-			4,
-			1,
-			54,
-		);
+		const newTable = await generateRandomTable(profile, figures, 4, 1, 54);
 		if (newTable === null) return;
 		return newTable;
 	};
@@ -109,7 +102,7 @@ export const RightBarProfileViewer = () => {
 							onClick={async () => {
 								const tablesToAdd: Table[] = [];
 								setGeneratingTable(true);
-								notifyAddedAsync(tableQuantity);
+								notifyAddedAsync();
 								for (let i = 0; i < tableQuantity; i++) {
 									await handleGenerateTable()
 										.then((table) => {

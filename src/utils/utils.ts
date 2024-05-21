@@ -1,8 +1,8 @@
+import { createCanvas, loadImage } from "canvas";
 import clsx from "clsx";
 import type { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { generateRandomMatrix, getRandom } from "./tables";
-import { createCanvas, loadImage } from "canvas";
 
 import type { Figure, Profile, Table, TableOptions } from "@/vite-env";
 import { v4 as uuidv4 } from "uuid";
@@ -12,7 +12,6 @@ export function cn(...inputs: ClassValue[]) {
 
 export async function generateRandomTable(
 	profile: Profile,
-	tables: Table[],
 	figures: Figure[],
 	n: number,
 	min: number,

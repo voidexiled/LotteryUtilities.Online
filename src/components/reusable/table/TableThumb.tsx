@@ -1,7 +1,7 @@
 import { TablesContext } from "@/contexts/TablesContext";
 import { cn } from "@/utils/utils";
 import type { Table, TablesContextType } from "@/vite-env";
-import { color, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";

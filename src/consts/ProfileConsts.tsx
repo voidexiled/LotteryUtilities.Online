@@ -1,5 +1,4 @@
 import type { Profile } from "@/vite-env";
-import { DEFAULT_FIGURES } from "./FiguresConsts";
 
 export const defaultProfile: Profile = {
 	name: "Default",

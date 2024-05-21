@@ -9,10 +9,10 @@ import {
 	SettingsIcon,
 } from "lucide-react";
 
-import { TopBarTitle } from "./top-bar/TopBarTitle";
-import { TopBarGroupButtons } from "./top-bar/TopBarGroupButtons";
 import { TopBarButton } from "./top-bar/TopBarButton";
+import { TopBarGroupButtons } from "./top-bar/TopBarGroupButtons";
 import { TopBarSelectProfile } from "./top-bar/TopBarSelectProfile";
+import { TopBarTitle } from "./top-bar/TopBarTitle";
 
 export const Header = () => {
 	return (

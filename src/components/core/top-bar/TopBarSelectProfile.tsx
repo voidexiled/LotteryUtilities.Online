@@ -1,4 +1,3 @@
-import { ChevronDown, MoreVertical, Plus } from "lucide-react";
 import {
 	Listbox,
 	ListboxButton,
@@ -6,11 +5,12 @@ import {
 	ListboxOptions,
 	Transition,
 } from "@headlessui/react";
+import { ChevronDown } from "lucide-react";
 
-import { forwardRef, type LegacyRef, useContext } from "react";
-import type { ProfileContextType } from "@/vite-env";
 import { DEFAULT_PROFILES } from "@/consts/ProfileConsts";
 import { ProfileContext } from "@/contexts/ProfileContext";
+import type { ProfileContextType } from "@/vite-env";
+import { type LegacyRef, forwardRef, useContext } from "react";
 
 const SelectProfileInput = forwardRef(
 	(props, ref: LegacyRef<HTMLButtonElement>) => (

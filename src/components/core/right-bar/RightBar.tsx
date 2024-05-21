@@ -1,20 +1,15 @@
 import { AnimatePresence } from "framer-motion";
 
-import type { TablesContextType } from "@/vite-env";
 import { TableThumb } from "@/components/reusable/table/TableThumb";
+import type { TablesContextType } from "@/vite-env";
 import { RightBarProfileViewer } from "./RightBarProfileViewer";
 
 type RightBarProps = {
 	tables: TablesContextType["tables"];
 	removeTable: TablesContextType["removeTable"];
-	setCurrentTable: TablesContextType["setCurrentTable"];
 };
 
-export const RightBar = ({
-	tables,
-	removeTable,
-	setCurrentTable,
-}: RightBarProps) => {
+export const RightBar = ({ tables, removeTable }: RightBarProps) => {
 	return (
 		<div className="flex flex-col bg-base-200 lg:min-w-[560px] lg:max-w-[560px] h-[320px] lg:h-full rounded-lg px-4 p-4 overflow-hidden order-2 lg:order-3 mt-4 lg:mt-0 ">
 			<RightBarProfileViewer />

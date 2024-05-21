@@ -2,7 +2,6 @@ import { FiguresContext } from "@/contexts/FiguresContext";
 import { TablesContext } from "@/contexts/TablesContext";
 import { cn } from "@/utils/utils";
 import type { FiguresContextType, TablesContextType } from "@/vite-env";
-import { transform } from "framer-motion";
 import { useContext, useEffect, useState } from "react";
 
 export const LoadingScreen = () => {
@@ -10,7 +9,6 @@ export const LoadingScreen = () => {
 	const {
 		loading: loadingTables,
 		transformingToDataUrl,
-		currentLoaded,
 		totalTables,
 	} = useContext(TablesContext) as TablesContextType;
 	const { loading: loadingFigures } = useContext(
