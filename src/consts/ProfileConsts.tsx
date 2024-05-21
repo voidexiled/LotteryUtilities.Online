@@ -95,4 +95,36 @@ export const DEFAULT_PROFILES: Profile[] = [
 			],
 		},
 	},
+	{
+		name: "Test profile",
+		pdfOptions: {
+			paperSize: "A4",
+			tableSize: {
+				width: 8.5,
+				height: 11,
+			},
+		},
+		tableOptions: {
+			size: "4x4",
+			comodin: [4, 5],
+			comodinPosition: [
+				{
+					figureId: 4,
+					positions: [0],
+				},
+				{
+					figureId: 4,
+					positions: [0, 12, 15],
+				},
+				{
+					figureId: 5,
+					positions: [5],
+				},
+				{
+					figureId: 5,
+					positions: [5, 9, 10],
+				},
+			],
+		},
+	},
 ];
