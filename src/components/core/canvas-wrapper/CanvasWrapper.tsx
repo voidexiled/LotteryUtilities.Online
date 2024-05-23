@@ -2,7 +2,7 @@ import { TableEditable } from "@/components/reusable/table/TableEditable";
 import { cn } from "@/utils/utils";
 import type { Figure, TablesContextType } from "@/vite-env";
 import { AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, InfoIcon } from "lucide-react";
 import { useEffect } from "react";
 
 type CanvasWrapperProps = {
@@ -79,6 +79,8 @@ export const CanvasWrapper = ({
 		return duplicates;
 	}
 
+
+
 	const thereAreFiguresRepeated = () => {
 		if (!currentTable) {
 			return false;
@@ -87,15 +89,16 @@ export const CanvasWrapper = ({
 		return duplicates.length > 0;
 	};
 	return (
-		<div className=" flex flex-col rounded-lg justify-center items-center lg:px-[48px] order-3 lg:order-2 h-[calc(100vh-200px)] lg:h-full grow">
+		<div className=" flex flex-col rounded-lg justify-center items-center lg:px-[48px] order-3 lg:order-2 h-[calc(100vh-50px)] lg:h-full grow">
 			<div className="w-full h-[60px] flex flex-row items-center justify-center">
-				<span>
-					{/* {currentTable
-						? currentTable.name
-						: "Selecciona una tabla para empezar..."} */}
+				<div className={cn("flex flex-row items-center gap-3 opacity-0 transition-all cursor-pointer", thereAreFiguresRepeated() && "opacity-100")}
+				>
+					<span className="">
+						Hay figuras repetidas!
+					</span>
+					<InfoIcon className="w-4 h-4 text-secondary" />
 
-					{thereAreFiguresRepeated() ? "¡Hay figuras repetidas!" : ""}
-				</span>
+				</div>
 			</div>
 			<div className="w-full grow  flex flex-row items-center justify-between p-2">
 				<div className="flex flex-col justify-between items-center">

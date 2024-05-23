@@ -63,11 +63,12 @@ export type TablesOptionSizes = "4x4" | "5x5";
 
 export type FiguresContextType = {
 	loading: boolean;
-	setCurrentFigure: (figure: Figure) => void;
+	setCurrentFigure: (figure: Figure | null) => void;
 	currentFigure: Figure | null;
 	figures: Figure[];
 	setFigures: (figures: Figure[]) => void;
 	addFigure: (figure: Figure) => void;
+	addFigures: (figures: Figure[]) => void;
 	removeFigure: (id: number) => void;
 	updateFigure: (figure: Figure) => void;
 	getFigure: (id: number) => Figure | null;

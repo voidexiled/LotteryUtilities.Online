@@ -1,7 +1,11 @@
+import { DEFAULT_TOOLS } from "@/consts/ToolsConsts";
+import { FiguresContext } from "@/contexts/FiguresContext";
+import { ToolsContext } from "@/contexts/ToolsContext";
 import { cn, getURLImage } from "@/utils/utils";
-import type { Figure, Table, TablesContextType } from "@/vite-env";
+import type { Figure, FiguresContextType, Table, TablesContextType, ToolsContextType } from "@/vite-env";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+
+import { useContext, useEffect, useState } from "react";
 type FigureEditableProps = {
 	index: number;
 	currentTable: TablesContextType["currentTable"];
@@ -12,6 +16,9 @@ type FigureEditableProps = {
 	updateTable: (table: Table) => void;
 };
 
+
+
+
 export const FigureEditable = ({
 	index,
 	tableSize,
@@ -21,6 +28,8 @@ export const FigureEditable = ({
 	setSelectedFigure,
 	updateTable,
 }: FigureEditableProps) => {
+	const { selectedTool } = useContext(ToolsContext) as ToolsContextType;
+	const { currentFigure: figurePaletteSelected } = useContext(FiguresContext) as FiguresContextType;
 	const [isSelected, setIsSelected] = useState(
 		selectedFigure?.figure === currentFigure && selectedFigure.index === index,
 	);
@@ -36,11 +45,69 @@ export const FigureEditable = ({
 		}
 	}, [selectedFigure, currentFigure, index]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		setSelectedFigure(null);
+	}, [selectedTool]);
+
 	useEffect(() => {
 		setSelectedFigure(null);
 		setIsSelected(false);
 	}, [currentTable]);
+
+	// Tool 0
+	const handleToolReplaceFigure = async () => {
+		if (figurePaletteSelected) {
+			// Lógica para la herramienta de paleta de figuras
+		}
+
+	}
+
+	//Tool 1
+	const handleToolSwapFigures = async () => {
+		if (!currentFigure || !currentTable) return;
+
+		if (!selectedFigure) {
+			setIsSelected(true);
+			setSelectedFigure({ index, figure: currentFigure });
+			return;
+		}
+
+		if (selectedFigure.index === index) {
+			setSelectedFigure(null);
+			return;
+		}
+
+		const copyOfTable = { ...currentTable };
+		const newFigures = [...currentTable.options.figures.flat()];
+
+		newFigures[index] = selectedFigure.figure;
+		newFigures[selectedFigure.index] = currentFigure;
+		const tableSize = currentTable.options.size === "4x4" ? 4 : 5;
+		const arraySizeXSize = Array.from({ length: tableSize }, (_, i) => newFigures.slice(i * tableSize, i * tableSize + tableSize));
+		copyOfTable.options.figures = arraySizeXSize;
+
+		const newImageURL = await getURLImage(copyOfTable);
+		copyOfTable.imageURL = newImageURL;
+
+		updateTable(copyOfTable);
+		setSelectedFigure(null);
+	}
+
+	const handleInteract = () => {
+		async () => {
+			if (!selectedTool) return;
+			switch (selectedTool.id) {
+				case DEFAULT_TOOLS[0].id:
+					await handleToolReplaceFigure();
+					break;
+				case DEFAULT_TOOLS[1].id:
+					await handleToolSwapFigures();
+					break;
+				default:
+					break;
+			}
+		}
+	}
 
 	return (
 		<>
@@ -50,46 +117,7 @@ export const FigureEditable = ({
 						"cursor-pointer relative  ",
 						tableSize === 4 ? "w-1/4 h-1/4" : "w-1/5 h-1/5  ",
 					)}
-					onClick={async () => {
-						if (currentFigure && currentTable) {
-							if (!selectedFigure) {
-								setIsSelected(true);
-								setSelectedFigure({ index, figure: currentFigure });
-							} else {
-								if (selectedFigure.index === index) {
-									setSelectedFigure(null);
-								} else {
-									const copyOfTable = currentTable;
-
-									// Hacer copia de las figuras
-									const newFigures = currentTable.options.figures.flat();
-
-									const copyOfCurrentFigure = currentFigure;
-									// const copyOfSelectedFigure = selectedFigure.figure;
-
-									newFigures[index] = selectedFigure.figure;
-									newFigures[selectedFigure.index] = copyOfCurrentFigure;
-
-									// Convertir el array unidimensional en un array bidimensional 4x4
-									const array4x4: Figure[][] = [];
-									for (let i = 0; i < newFigures.length; i += 4) {
-										const row: Figure[] = newFigures.slice(i, i + 4);
-										array4x4.push(row);
-									}
-
-									// New table with updated positions
-									copyOfTable.options.figures = array4x4;
-
-									// update the image
-									const newImageURL = await getURLImage(copyOfTable);
-									copyOfTable.imageURL = newImageURL;
-
-									updateTable(copyOfTable);
-									setSelectedFigure(null);
-								}
-							}
-						}
-					}}
+					onClick={handleInteract}
 				>
 					<motion.img
 						initial={{ opacity: 0 }}

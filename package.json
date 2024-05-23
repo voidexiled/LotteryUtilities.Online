@@ -16,6 +16,7 @@
     "canvas": "^2.11.2",
     "clsx": "^2.1.1",
     "framer-motion": "^11.2.4",
+    "kmenu": "^1.4.32",
     "localforage": "^1.10.0",
     "lucide-react": "^0.378.0",
     "pure-rand": "^6.1.0",
