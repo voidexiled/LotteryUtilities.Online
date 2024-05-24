@@ -4,14 +4,17 @@ import type { Figure, TablesContextType } from "@/vite-env";
 import { motion } from "framer-motion";
 import { useContext, useEffect, useState } from "react";
 import { FigureEditable } from "./FigureEditable";
+
 export const TableEditable = () => {
 	const { updateTable, currentTable } = useContext(
 		TablesContext,
 	) as TablesContextType;
+
 	const [selectedFigure, setSelectedFigure] = useState<{
 		index: number;
 		figure: Figure;
 	} | null>(null);
+
 	const [size, setSize] = useState(0);
 
 	useEffect(() => {
@@ -34,7 +37,7 @@ export const TableEditable = () => {
 					}}
 					exit={{ opacity: 0, scale: 0.65, transition: { duration: 0.08 } }}
 					className={cn(
-						"min-w-[240px] max-w-[300px] grow  rounded-md overflow-hidden relative flex flex-wrap",
+						"relative flex min-w-[240px] max-w-[300px] grow flex-wrap overflow-hidden rounded-md",
 					)}
 				>
 					{currentTable.options.figures.flat().map((figure, index) => (

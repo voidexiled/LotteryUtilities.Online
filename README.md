@@ -33,4 +33,4 @@
 # On the board
 
 ## Profile Editor (Working on...)
-- [ ] A way to define if a comodin have optional position or obligatory position
+- [x] A way to define if a comodin have optional position or obligatory position

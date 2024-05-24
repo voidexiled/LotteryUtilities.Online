@@ -145,3 +145,23 @@ export async function getURLImage(table: Table) {
 	});
 	return url;
 }
+
+export async function uploadImage(file: File) {
+	if (!file.type.includes("image")) return;
+	const canvasWidth: number = 800 / 4;
+	const canvasHeight: number = 1200 / 4;
+
+	const canvas = createCanvas(canvasWidth, canvasHeight);
+	const ctx = canvas.getContext("2d");
+	ctx.quality = "fast";
+	const img = await loadImage(URL.createObjectURL(file));
+	ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+	return canvas.toDataURL();
+}
+
+export const handleOpacityOnLoadImage = (
+	e: React.SyntheticEvent<HTMLImageElement, Event>,
+) => {
+	e.currentTarget.classList.remove("opacity-0");
+	e.currentTarget.classList.add("opacity-100");
+};

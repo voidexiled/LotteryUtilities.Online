@@ -6,11 +6,15 @@ export const FiguresContext = createContext<FiguresContextType | null>(null);
 
 export const FiguresProvider = ({ children }: any) => {
 	const [loading, setLoading] = useState(true);
-	const [figures, setFigures] = useState<Figure[]>(DEFAULT_FIGURES);
+	const [figures, setFigures] = useState<Figure[]>([] as Figure[]);
 	const [currentFigure, setCurrentFigure] = useState<Figure | null>(null);
 
 	const addFigure = (figure: Figure) => {
 		setFigures([...figures, figure]);
+	};
+
+	const addFigures = (_figures: Figure[]) => {
+		setFigures([...figures, ..._figures]);
 	};
 
 	const removeFigure = (id: number) => {
@@ -28,9 +32,18 @@ export const FiguresProvider = ({ children }: any) => {
 	useEffect(() => {
 		const formatFigures = async () => {
 			const savedFigures = localStorage.getItem("figures");
-			const parsedFigures = savedFigures
-				? (JSON.parse(savedFigures) as Figure[])
-				: DEFAULT_FIGURES;
+
+			let parsedFigures: Figure[];
+
+			parsedFigures = DEFAULT_FIGURES
+			if (savedFigures && savedFigures !== "[]") {
+				const parsed = JSON.parse(savedFigures);
+				console.log(parsed);
+				parsedFigures = parsed as Figure[];
+				console.log(parsedFigures);
+			}
+
+			console.log(parsedFigures);
 
 			const newFigures = parsedFigures.filter(async (figure) => {
 				if (figure.src === undefined) return figure;
@@ -81,6 +94,7 @@ export const FiguresProvider = ({ children }: any) => {
 				setCurrentFigure,
 				currentFigure,
 				addFigure,
+				addFigures,
 				removeFigure,
 				updateFigure,
 				getFigure,

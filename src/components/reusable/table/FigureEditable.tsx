@@ -36,7 +36,6 @@ export const FigureEditable = ({
 		}
 	}, [selectedFigure, currentFigure, index]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		setSelectedFigure(null);
 		setIsSelected(false);
