@@ -1,6 +1,6 @@
 import { DEFAULT_TOOLS } from "@/consts/ToolsConsts";
 import type { Tool, ToolsContextType } from "@/vite-env";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 
 export const ToolsContext = createContext<ToolsContextType | null>(null);
 

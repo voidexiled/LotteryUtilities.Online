@@ -69,6 +69,7 @@ export const RightBarProfileViewer = () => {
 								onClick={async () => {
 									if (files.length > 0) {
 										await handleAddCustomFigures().then((newFigures) => {
+											if (!newFigures) return;
 											addFigures(newFigures);
 										});
 
