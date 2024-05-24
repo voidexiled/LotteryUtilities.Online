@@ -102,8 +102,8 @@ export const TableGenerator = () => {
 
     return (
         <>
-            <span className="text-secondary">Generador</span>
-            <div className="flex flex-col gap-1 text-xs ">
+            <span className="text-secondary hidden lg:block">Generador</span>
+            <div className="flex flex-col gap-1 text-xs pt-2">
                 <div className="flex flex-row gap-2 items-center">
                     <span>Cantidad</span>
                     <input
