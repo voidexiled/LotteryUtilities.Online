@@ -2,6 +2,7 @@ import { FiguresContext } from "@/contexts/FiguresContext";
 import { ProfileContext } from "@/contexts/ProfileContext";
 import { cn, uploadImage } from "@/utils/utils";
 import type {
+	Figure,
 	FiguresContextType,
 	ProfileContextType
 } from "@/vite-env";
@@ -70,7 +71,7 @@ export const RightBarProfileViewer = () => {
 									if (files.length > 0) {
 										await handleAddCustomFigures().then((newFigures) => {
 											if (!newFigures) return;
-											addFigures(newFigures);
+											addFigures(newFigures as Figure[]);
 										});
 
 									}
