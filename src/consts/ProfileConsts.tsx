@@ -122,4 +122,20 @@ export const DEFAULT_PROFILES: Profile[] = [
 			random: false,
 		},
 	},
+	{
+		name: "5x5",
+		pdfOptions: {
+			paperSize: "A4",
+			tableSize: {
+				width: 7.4,
+				height: 12.7,
+			},
+		},
+		tableOptions: {
+			size: "5x5",
+			comodin: null,
+			comodinPosition: null,
+			random: true,
+		},
+	}
 ];
