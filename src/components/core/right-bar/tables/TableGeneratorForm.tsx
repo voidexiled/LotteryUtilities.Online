@@ -8,7 +8,7 @@ import type {
     Table,
     TablesContextType
 } from "@/vite-env";
-import { Trash2Icon } from "lucide-react";
+import { Trash2Icon, X, XCircle, XCircleIcon } from "lucide-react";
 import {
     CheckIcon
 } from "lucide-react";
@@ -16,7 +16,7 @@ import { useRef, useState } from "react";
 import { useContext } from "react";
 import { Flip, type Id, toast } from "react-toastify";
 
-export const TableGenerator = () => {
+export const TableGeneratorForm = () => {
     const { profile } = useContext(ProfileContext) as ProfileContextType;
     const { figures } = useContext(FiguresContext) as FiguresContextType;
     const { emptyTables, addTables } = useContext(
@@ -26,6 +26,8 @@ export const TableGenerator = () => {
     const [tableQuantity, setTableQuantity] = useState(1);
     const [generatingTable, setGeneratingTable] = useState(false);
     const toastId = useRef<Id | null>(null);
+
+    const [latestCandidates, setLatestCandidates] = useState<Set<number>>(new Set());
 
     const notifyAddedAsync = () => {
         toastId.current = toast("Generando tablas...", {
@@ -43,14 +45,45 @@ export const TableGenerator = () => {
             transition: Flip,
             autoClose: 3200,
             bodyStyle: { fontSize: "0.75rem" },
-            icon: <Trash2Icon className="w-4 h-4 " />,
+            icon: <Trash2Icon className="h-4 w-4" />,
         });
 
+    const notifyError = (message: string) => {
+        toast(message, {
+            type: "error",
+            transition: Flip,
+            autoClose: 3200,
+            bodyStyle: { fontSize: "0.75rem" },
+            icon: <XCircleIcon className="h-4 w-4" />,
+        });
+    }
 
     const generate = async (): Promise<Table | undefined> => {
-        const newTable = await generateRandomTable(profile, figures, 4, 1, 54);
+        const size = profile.tableOptions.size === "4x4" ? 4 : 5;
+        if (profile.tableOptions.comodin && figures.length <= size * size) {
+            notifyError("No hay figuras suficientes para generar la tabla.");
+            return;
+        }
+        if (figures.length < size * size) {
+            notifyError("No hay figuras suficientes para generar la tabla.");
+            return;
+        }
+
+
+        console.log(profile, figures, figures.length)
+
+        const { table: newTable, candidates } = await generateRandomTable(profile, figures, size, 1, figures.length, latestCandidates)
         if (newTable === null) return;
+        await updateLatestCandidates(candidates);
+        console.log(latestCandidates.size);
         return newTable;
+    };
+    // Function to update latestCandidates and wait for the state to be updated
+    const updateLatestCandidates = async (candidates: Set<number>) => {
+        return new Promise<void>((resolve) => {
+            setLatestCandidates(candidates);
+            resolve();
+        });
     };
 
     const handleDeleteAllTables = () => {
@@ -67,12 +100,16 @@ export const TableGenerator = () => {
         if (tableQuantity > 10) {
             batchSize = Math.floor(tableQuantity / 10);
         }
+
+
         for (let i = 0; i < tableQuantity; i += batchSize) {
             const batchPromises = Array.from({ length: Math.min(batchSize, tableQuantity - i) }, (_, j) =>
                 generate()
                     .then((table) => {
                         if (table) {
+                            // for (const t of table) {
                             tablesToAdd.push(table);
+                            // }
                         }
                     })
                     .finally(() => {
@@ -85,13 +122,14 @@ export const TableGenerator = () => {
             );
 
             await Promise.all(batchPromises);
+
         }
 
         addTables(tablesToAdd);
 
         if (toastId.current) {
             toast.update(toastId.current, {
-                icon: <CheckIcon className="w-4 h-4" />,
+                icon: <CheckIcon className="h-4 w-4" />,
                 progress: 1,
                 isLoading: false,
             });
@@ -102,9 +140,9 @@ export const TableGenerator = () => {
 
     return (
         <>
-            <span className="text-secondary hidden lg:block">Generador</span>
-            <div className="flex flex-col gap-1 text-xs pt-2">
-                <div className="flex flex-row gap-2 items-center">
+            <span className="hidden text-secondary lg:block">Generador</span>
+            <div className="flex flex-col gap-1 pt-2 text-xs">
+                <div className="flex flex-row items-center gap-2">
                     <span>Cantidad</span>
                     <input
                         type="number"
@@ -118,7 +156,7 @@ export const TableGenerator = () => {
                     />
                 </div>
             </div>
-            <div className="flex flex-row gap-2 text-xs pt-2">
+            <div className="flex flex-row gap-2 pt-2 text-xs">
                 <button
                     disabled={generatingTable}
                     type="button"
@@ -132,12 +170,12 @@ export const TableGenerator = () => {
                 </button>
                 <button
                     disabled={generatingTable}
-                    className="btn btn-error btn-sm lg:btn-xs flex justify-center items-center text-white"
+                    className="btn btn-error btn-sm lg:btn-xs flex items-center justify-center text-white"
                     type="button"
                     onClick={handleDeleteAllTables}
                 >
                     <span>Borrar todo</span>
-                    <Trash2Icon className="w-3 h-3 transition-all duration-200 group-hover:scale-110 ease-out" />
+                    <Trash2Icon className="h-3 w-3 transition-all duration-200 ease-out group-hover:scale-110" />
                 </button>
             </div>
         </>

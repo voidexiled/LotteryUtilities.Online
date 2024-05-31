@@ -1,6 +1,6 @@
 export const TopBarTitle = ({ title }: { title: string }) => {
 	return (
-		<div className="hidden lg:flex btn btm-md text-xl font-bold text-base-content filter-none tracking-widest text-center ">
+		<div className="btn btm-md hidden text-center font-bold text-base-content text-xl tracking-widest filter-none lg:flex">
 			{title}
 		</div>
 	);

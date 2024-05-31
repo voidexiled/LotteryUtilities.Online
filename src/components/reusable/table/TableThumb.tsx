@@ -31,7 +31,7 @@ export const TableThumb = ({ table }: TableThumbProps) => {
 			autoClose: 2200,
 			type: "error",
 			closeOnClick: true,
-			icon: <Check className="w-4 h-4 " />,
+			icon: <Check className="h-4 w-4" />,
 		});
 	}
 
@@ -66,10 +66,10 @@ export const TableThumb = ({ table }: TableThumbProps) => {
 				duration: 0.15,
 			}}
 			className={cn(
-				"relative disabled-right-click transition-all w-[72px] rounded-sm overflow-hidden hover:cursor-pointer hover:scale-105  hover:after:opacity-100 after:absolute after:transition-all after:opacity-0 after:inset-0 after:content-[''] after:rounded-sm after:shadow-base-300 after:shadow-inner after:z-10 shadow-none border-transparent border",
+				"disabled-right-click relative w-[72px] overflow-hidden rounded-sm border border-transparent shadow-none transition-all after:absolute after:inset-0 after:z-10 hover:scale-105 hover:cursor-pointer after:rounded-sm after:opacity-0 hover:after:opacity-100 after:shadow-base-300 after:shadow-inner after:transition-all after:content-['']",
 				isSelected
 					? "border-accent [box-shadow:0px_0px_10px_2px_#9370db] after:shadow-none"
-					: "after:shadow-sm  ",
+					: "after:shadow-sm",
 			)}
 			onClick={handleSelectTable}
 			onContextMenu={handleRemoveTable}
@@ -78,15 +78,15 @@ export const TableThumb = ({ table }: TableThumbProps) => {
 				width="10px"
 				alt={`table ${table.id}, size ${table.options.size}`}
 				src={table.imageURL}
-				className="opacity-0 transition-all object-contain object-center w-full"
+				className="w-full object-contain object-center opacity-0 transition-all"
 				onLoad={handleOpacityOnLoadImage}
 				loading="lazy"
 			/>
 			<div
 				className={cn(
-					"absolute inset-0 flex items-center justify-center bg-secondary bg-opacity-0 transition-all backdrop-blur-none brigthness-80 duration-[120ms] ease-out ",
-					currentTable !== null && isSelected && "bg-opacity-50 ",
-					currentTable !== null && !isSelected && " brigthness-50",
+					"brigthness-80 absolute inset-0 flex items-center justify-center bg-secondary bg-opacity-0 backdrop-blur-none transition-all duration-[120ms] ease-out",
+					currentTable !== null && isSelected && "bg-opacity-50",
+					currentTable !== null && !isSelected && "brigthness-50",
 				)}
 			/>
 		</motion.div>

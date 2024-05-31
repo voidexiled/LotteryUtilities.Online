@@ -10,13 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@files-ui/react": "^1.2.4",
     "@headlessui/react": "^2.0.3",
     "@headlessui/tailwindcss": "^0.2.0",
     "@types/uuid": "^9.0.8",
     "canvas": "^2.11.2",
     "clsx": "^2.1.1",
-    "dropzone": "6.0.0-beta.2",
     "framer-motion": "^11.2.4",
+    "jspdf": "^2.5.1",
     "kmenu": "^1.4.32",
     "localforage": "^1.10.0",
     "lucide-react": "^0.378.0",

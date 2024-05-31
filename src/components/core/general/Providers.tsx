@@ -1,4 +1,5 @@
 import { FiguresProvider } from "@/contexts/FiguresContext";
+import { FlagsProvider } from "@/contexts/FlagsContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import { TablesProvider } from "@/contexts/TablesContext";
 import { ToolsProvider } from "@/contexts/ToolsContext";
@@ -23,14 +24,18 @@ export const Providers = ({
 	return (
 		<MenuProvider config={config}>
 
-
 			<ProfileProvider>
 				<ToolsProvider>
 					<FiguresProvider>
-						<TablesProvider>{children}</TablesProvider>
+						<TablesProvider>
+							<FlagsProvider>
+								{children}
+							</FlagsProvider>
+						</TablesProvider>
 					</FiguresProvider>
 				</ToolsProvider>
 			</ProfileProvider>
+
 		</MenuProvider>
 	);
 };

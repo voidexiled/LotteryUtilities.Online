@@ -10,6 +10,7 @@ export type TableOptionsProfile = {
 	size: "4x4" | "5x5";
 	comodin: number[] | null;
 	comodinPosition: { figureId: number; positions: number[] }[] | null;
+	random?: boolean;
 };
 
 export type PDFOptionsProfile = {
@@ -29,6 +30,15 @@ export type Tool = {
 	icon: string | ReactNode;
 	description: string;
 	keyboard_shortcut: string;
+};
+
+export type FlagsContextType = {
+	showProfiles: boolean;
+	showFigures: boolean;
+	showTables: boolean;
+	setShowProfiles: (show: boolean) => void;
+	setShowFigures: (show: boolean) => void;
+	setShowTables: (show: boolean) => void;
 };
 export type ToolsContextType = {
 	selectedTool: Tool | null;

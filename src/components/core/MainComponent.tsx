@@ -1,18 +1,19 @@
 import "../../styles/cmdk.css";
 
-import type { FiguresContextType, TablesContextType } from "@/vite-env";
+import type { FiguresContextType, FlagsContextType, TablesContextType } from "@/vite-env";
 import { useContext, useEffect, useState } from "react";
 
 import { TablesContext } from "@/contexts/TablesContext";
 
-import { ToastContainer } from "react-toastify";
+import { Flip, ToastContainer, toast } from "react-toastify";
 import { LoadingScreen } from "../LoadingScreen";
 import { CanvasWrapper } from "./canvas-wrapper/CanvasWrapper";
 import { LeftBar } from "./left-bar/LeftBar";
 import { RightBar } from "./right-bar/RightBar";
 import "react-toastify/dist/ReactToastify.css";
+import { DEFAULT_FIGURES } from "@/consts/FiguresConsts";
 import { FiguresContext } from "@/contexts/FiguresContext";
-import { Button, Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
+import { FlagsContext } from "@/contexts/FlagsContext";
 import {
 	type Command,
 	CommandMenu,
@@ -21,21 +22,55 @@ import {
 	useKmenu,
 } from "kmenu";
 import type { CategoryCommand } from "kmenu/dist/types";
-import { FolderCog2Icon, ImagePlay, UserCog2Icon } from "lucide-react";
+import { BoxesIcon, CheckIcon, FolderCog2Icon, ImagePlay, ListRestartIcon, UserCog2Icon } from "lucide-react";
+import { FigureManagerToolDialog } from "./tools/FigureManagerToolDialog";
 
 export const MainComponent = () => {
 	const { currentTable, tables, setCurrentTable } = useContext(
 		TablesContext,
 	) as TablesContextType;
-	const { setOpen, toggle } = useKmenu();
-	const { figures, setCurrentFigure } = useContext(
+	const { setOpen, toggle, open } = useKmenu();
+	const { figures, setCurrentFigure, setFigures } = useContext(
 		FiguresContext,
 	) as FiguresContextType;
+
+
+	const { showProfiles, showFigures, showTables, setShowProfiles, setShowFigures, setShowTables } = useContext(FlagsContext) as FlagsContextType;
 
 
 	const [isOpenDialog, setIsOpenDialog] = useState(false);
 
 
+	const templateSettingsCommands: CategoryCommand[] = [
+		{
+			icon: <UserCog2Icon />,
+			text: `${showProfiles ? "Ocultar" : "Mostrar"} conf. de perfiles`,
+			keywords: "mostrar perfiles",
+			perform: () => toggleShowProfiles(),
+		},
+		{
+			icon: <FolderCog2Icon />,
+			text: `${showFigures ? "Ocultar" : "Mostrar"} conf. de figuras`,
+			keywords: "mostrar figuras",
+			perform: () => toggleShowFigures(),
+		},
+		{
+			icon: <BoxesIcon />,
+			text: `${showTables ? "Ocultar" : "Mostrar"} conf. de tablas`,
+			keywords: "mostrar tablas",
+			perform: () => toggleShowTables(),
+		}
+	]
+
+	const notifyEnabledUi = (message: string) => {
+		toast(message, {
+			type: "success",
+			transition: Flip,
+			autoClose: 2200,
+			bodyStyle: { fontSize: "0.75rem" },
+			icon: <CheckIcon className="h-4 w-4" />,
+		});
+	}
 
 	const mainCommands: Command[] = [
 		{
@@ -44,32 +79,52 @@ export const MainComponent = () => {
 				{
 					icon: <ImagePlay />,
 					text: "Selector de figuras",
-					keywords: "selector,figuras,seleccionar",
+					keywords: "selector",
 					perform: () => setOpen(2),
+					shortcuts: { modifier: "ctrl", keys: ["f"] },
 				},
 			],
 		},
 		{
 			category: "Configuración",
+			commands: templateSettingsCommands
+		},
+		{
+			category: "Restablecer",
 			commands: [
 				{
-					icon: <UserCog2Icon />,
-					text: "Perfiles",
-					keywords: "añadir,perfiles,configuracion,editar,eliminar",
-					perform: () => setOpen(3),
-				},
-				{
-					icon: <FolderCog2Icon />,
-					text: "Figuras",
-					keywords: "añadir,figuras,configuracion,editar,eliminar",
+					icon: <ListRestartIcon />,
+					text: "Restablecer figuras",
+					keywords: "restablecer figuras",
 					perform: () => {
-						setIsOpenDialog(true);
-					},
-
+						setFigures(DEFAULT_FIGURES);
+						notifyEnabledUi("Se han restablecido las figuras correctamente.");
+					}
 				}
-			],
-		},
+			]
+		}
 	];
+
+	const toggleShowProfiles = () => {
+		if (showFigures || showTables) {
+
+
+			setShowProfiles(!showProfiles);
+			notifyEnabledUi(`Se ha ${showProfiles ? "ocultado" : "habilitado"} la configuración de perfiles.`);
+		}
+	}
+	const toggleShowFigures = () => {
+		if (showProfiles || showTables) {
+			setShowFigures(!showFigures);
+			notifyEnabledUi(`Se ha ${showFigures ? "ocultado" : "habilitado"} la configuración de figuras.`);
+		}
+	}
+	const toggleShowTables = () => {
+		if (showProfiles || showFigures) {
+			setShowTables(!showTables);
+			notifyEnabledUi(`Se ha ${showTables ? "ocultado" : "habilitado"} la configuración de tablas.`);
+		}
+	}
 
 	const commandsFigureSelector: Command[] = [
 		{
@@ -80,10 +135,36 @@ export const MainComponent = () => {
 		},
 	];
 
-	const [rootCommands] = useCommands(mainCommands);
+	const [rootCommands, setRootCommands] = useCommands(mainCommands);
 	const [toolFigureSelectorCommands, setToolFigureSelectorCommands] = useCommands(
 		commandsFigureSelector,
 	);
+
+	useEffect(() => {
+		setRootCommands(mainCommands);
+	}, [showFigures, showProfiles, showTables]);
+
+	useEffect(() => {
+		if (showFigures) {
+			setShowProfiles(false);
+			setShowTables(false);
+		}
+	}, [showFigures]);
+
+	useEffect(() => {
+		if (showProfiles) {
+			setShowFigures(false);
+			setShowTables(false);
+		}
+	}, [showProfiles]);
+
+	useEffect(() => {
+		if (showTables) {
+			setShowProfiles(false);
+			setShowFigures(false);
+		}
+	}, [showTables]);
+
 
 	useEffect(() => {
 		const figs = figures.map((fig) => {
@@ -98,6 +179,30 @@ export const MainComponent = () => {
 		commandsFigureSelector[0].commands.push(...figs);
 		setToolFigureSelectorCommands(commandsFigureSelector);
 	}, [figures]);
+
+
+	useEffect(() => {
+		const keyManagerListener = (e: KeyboardEvent) => {
+			if (e.key === "f" && e.ctrlKey) {
+				e.preventDefault();
+				e.stopPropagation();
+				setOpen(2);
+			}
+
+			if (open > 0 && e.key === "Escape") {
+				e.preventDefault();
+				e.stopPropagation();
+				setOpen(0);
+			}
+		};
+
+		document.addEventListener("keydown", keyManagerListener);
+
+
+		return () => {
+			document.removeEventListener("keydown", keyManagerListener);
+		};
+	});
 
 	return (
 		<>
@@ -128,51 +233,10 @@ export const MainComponent = () => {
 						commands={toolFigureSelectorCommands}
 						crumbs={["Comandos", "Figuras"]}
 						index={2}
+
 					/>
 				</CommandWrapper>
-				<Transition appear show={isOpenDialog}>
-					<Dialog as="div" className="relative z-30 focus:outline-none" onClose={() => {
-						setIsOpenDialog(false);
-					}}>
-						<TransitionChild
-							enter="delay-100"
-							enterFrom="opacity-0 transform-[scale(95%)]"
-							enterTo="opacity-100 transform-[scale(100%)]"
-							leave="ease-in duration-200"
-							leaveFrom="opacity-100 transform-[scale(100%)]"
-							leaveTo="opacity-0 transform-[scale(95%)]"
-						>
-							<div className="fixed inset-0 flex w-screen items-center justify-center p-4 backdrop-blur-[3px] transition-all">
-
-
-								<DialogPanel className="w-full max-w-md rounded-xl bg-base-200 p-6 backdrop-blur-2xl">
-									<DialogTitle as="h3" className="text-base/7 font-medium text-white">
-										Payment successful
-									</DialogTitle>
-									<p className="mt-2 text-sm/6 text-white/50">
-										Your payment has been successfully submitted. We’ve sent you an email with all of the details of
-										your order.
-									</p>
-									<div className="mt-4">
-										<Button
-											className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
-											onClick={() => {
-												setIsOpenDialog(false);
-											}}
-										>
-											Got it, thanks!
-										</Button>
-									</div>
-								</DialogPanel>
-							</div>
-						</TransitionChild>
-
-					</Dialog>
-
-				</Transition>
-
-
-
+				<FigureManagerToolDialog isOpen={isOpenDialog} setIsOpen={setIsOpenDialog} />
 				<div className="fixed right-2 bottom-4 z-50 flex h-12 flex-col gap-2 p-4 lg:hidden">
 					<button
 						type="button"

@@ -89,29 +89,29 @@ export const CanvasWrapper = ({
 		return duplicates.length > 0;
 	};
 	return (
-		<div className=" flex flex-col rounded-lg justify-center items-center lg:px-[48px] order-3 lg:order-2 h-[calc(100vh-50px)] lg:h-full grow">
-			<div className="w-full h-[60px] flex flex-row items-center justify-center">
-				<div className={cn("flex flex-row items-center gap-3 opacity-0 transition-all cursor-pointer", thereAreFiguresRepeated() && "opacity-100")}
+		<div className="order-3 flex h-[calc(100vh-50px)] grow flex-col items-center justify-center rounded-lg lg:order-2 lg:h-full lg:px-[48px]">
+			<div className="flex h-[60px] w-full flex-row items-center justify-center">
+				<div className={cn("flex cursor-pointer flex-row items-center gap-3 opacity-0 transition-all", thereAreFiguresRepeated() && "opacity-100")}
 				>
 					<span className="">
 						Hay figuras repetidas!
 					</span>
-					<InfoIcon className="w-4 h-4 text-secondary" />
+					<InfoIcon className="h-4 w-4 text-secondary" />
 
 				</div>
 			</div>
-			<div className="w-full grow  flex flex-row items-center justify-between p-2">
-				<div className="flex flex-col justify-between items-center">
+			<div className="flex w-full grow flex-row items-center justify-between p-2">
+				<div className="flex flex-col items-center justify-between">
 					<button
 						type="button"
 						disabled={!thereArePreviousTable()}
 						className={cn(
-							"group btn-md btn btn-circle btn-ghost hover:bg-accent/10 hover:shadow-xl hover:shadow-accent/10 p-0 flex flex-row items-center justify-center focus:outline-none opacity-0",
+							"group btn-md btn btn-circle btn-ghost flex flex-row items-center justify-center p-0 opacity-0 hover:bg-accent/10 hover:shadow-accent/10 hover:shadow-xl focus:outline-none",
 							thereArePreviousTable() && "opacity-100",
 						)}
 						onClick={previousTable}
 					>
-						<ChevronLeft className="w-7 h-7 text-primary transition-all duration-200 group-hover:scale-110 ease-out" />
+						<ChevronLeft className="h-7 w-7 text-primary transition-all duration-200 ease-out group-hover:scale-110" />
 					</button>
 				</div>
 
@@ -130,12 +130,12 @@ export const CanvasWrapper = ({
 						disabled={!thereAreNextTable()}
 						type="button"
 						className={cn(
-							"group btn-md btn btn-circle btn-ghost hover:bg-accent/10 hover:shadow-xl hover:shadow-accent/10 p-0 flex flex-row items-center justify-center focus:outline-none opacity-0",
+							"group btn-md btn btn-circle btn-ghost flex flex-row items-center justify-center p-0 opacity-0 hover:bg-accent/10 hover:shadow-accent/10 hover:shadow-xl focus:outline-none",
 							thereAreNextTable() && "opacity-100",
 						)}
 						onClick={nextTable}
 					>
-						<ChevronRight className="w-7 h-7 text-primary transition-all duration-200 group-hover:scale-110 ease-out " />
+						<ChevronRight className="h-7 w-7 text-primary transition-all duration-200 ease-out group-hover:scale-110" />
 					</button>
 				</div>
 			</div>

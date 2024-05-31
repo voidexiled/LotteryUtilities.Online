@@ -17,7 +17,7 @@ const SelectProfileInput = forwardRef(
 		<button
 			type="button"
 			ref={ref}
-			className="btn btn-sm min-w-[130px] max-w-[180px] justify-between "
+			className="btn btn-sm min-w-[130px] max-w-[180px] justify-between"
 			{...props}
 		/>
 	),
@@ -26,7 +26,7 @@ const SelectProfileOption = forwardRef(
 	(props, ref: LegacyRef<HTMLButtonElement>) => (
 		<button
 			ref={ref}
-			className="btn btn-sm text-xs text-left justify-start "
+			className="btn btn-sm justify-start text-left text-xs"
 			{...props}
 		/>
 	),
@@ -50,7 +50,7 @@ export const TopBarSelectProfile = () => {
 		>
 			<ListboxButton as={SelectProfileInput}>
 				{profile.name}
-				<ChevronDown className="ml-2 w-4 h-4 text-accent" />
+				<ChevronDown className="ml-2 h-4 w-4 text-accent" />
 			</ListboxButton>
 			<Transition
 				enter="duration-300 ease-out"
@@ -62,7 +62,7 @@ export const TopBarSelectProfile = () => {
 			>
 				<ListboxOptions
 					anchor="bottom start"
-					className="flex flex-col gap-1 px-2 py-1 bg-base-200 rounded-lg shadow-lg shadow-base-200/20 origin-top transition w-[180px]"
+					className="flex w-[180px] origin-top flex-col gap-1 rounded-lg bg-base-200 px-2 py-1 shadow-base-200/20 shadow-lg transition"
 				>
 					{DEFAULT_PROFILES.map((profile) => {
 						return (

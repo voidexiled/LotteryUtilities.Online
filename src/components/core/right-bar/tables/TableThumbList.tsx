@@ -1,15 +1,24 @@
 import { TableThumb } from "@/components/reusable/table/TableThumb";
 import { TablesContext } from "@/contexts/TablesContext";
 import type { TablesContextType } from "@/vite-env";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useContext } from "react";
 
-export const RightBarTableThumbs = () => {
+export const TableThumbList = () => {
     const { tables } = useContext(
         TablesContext,
     ) as TablesContextType;
     return (
-        <div className="custom-scrollbar flex flex-row gap-4 text-xs p-6 overflow-y-auto flex-wrap mt-8 rounded-lg bg-base-300  shadow-inner shadow-base-200/25 grow w-full justify-normal items-start scroll-smooth content-start disabled-select h-[160px]">
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+                type: "tween",
+                duration: 0.15,
+            }}
+            exit={{ opacity: 0, scale: 0.72 }}
+
+            className="custom-scrollbar disabled-select mt-8 flex h-[160px] w-full grow flex-row flex-wrap content-start items-start justify-normal gap-4 overflow-y-auto scroll-smooth rounded-lg bg-base-300 p-6 text-xs shadow-base-200/25 shadow-inner">
             <AnimatePresence mode="sync">
                 {tables.map((table) => {
                     return (
@@ -20,6 +29,6 @@ export const RightBarTableThumbs = () => {
                     );
                 })}
             </AnimatePresence>
-        </div>
+        </motion.div>
     )
 }

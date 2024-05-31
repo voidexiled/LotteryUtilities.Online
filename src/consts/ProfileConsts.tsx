@@ -5,14 +5,16 @@ export const defaultProfile: Profile = {
 	pdfOptions: {
 		paperSize: "A4",
 		tableSize: {
-			width: 8.5,
-			height: 11,
+			width: 7.6,
+			height: 12.4,
 		},
+
 	},
 	tableOptions: {
 		size: "4x4",
 		comodin: null,
 		comodinPosition: null,
+		random: true,
 	},
 };
 
@@ -23,19 +25,20 @@ export const DEFAULT_PROFILES: Profile[] = [
 		pdfOptions: {
 			paperSize: "A4",
 			tableSize: {
-				width: 8.5,
-				height: 11,
+				width: 6.2,
+				height: 12.7,
 			},
 		},
 		tableOptions: {
 			size: "4x4",
-			comodin: [1],
+			comodin: [55],
 			comodinPosition: [
 				{
-					figureId: 1,
+					figureId: 55,
 					positions: [5, 6, 9, 10],
 				},
 			],
+			random: true,
 		},
 	},
 	{
@@ -43,8 +46,8 @@ export const DEFAULT_PROFILES: Profile[] = [
 		pdfOptions: {
 			paperSize: "A4",
 			tableSize: {
-				width: 8.5,
-				height: 11,
+				width: 7.4,
+				height: 12.7,
 			},
 		},
 		tableOptions: {
@@ -60,6 +63,7 @@ export const DEFAULT_PROFILES: Profile[] = [
 					positions: [0, 3, 12, 15],
 				},
 			],
+			random: true,
 		},
 	},
 	{
@@ -67,8 +71,8 @@ export const DEFAULT_PROFILES: Profile[] = [
 		pdfOptions: {
 			paperSize: "A4",
 			tableSize: {
-				width: 8.5,
-				height: 11,
+				width: 5,
+				height: 12.7,
 			},
 		},
 		tableOptions: {
@@ -92,6 +96,7 @@ export const DEFAULT_PROFILES: Profile[] = [
 					positions: [0, 3, 12, 15],
 				},
 			],
+			random: true,
 		},
 	},
 	{
@@ -99,31 +104,22 @@ export const DEFAULT_PROFILES: Profile[] = [
 		pdfOptions: {
 			paperSize: "A4",
 			tableSize: {
-				width: 8.5,
-				height: 11,
+				width: 7.4,
+				height: 12.7,
 			},
 		},
 		tableOptions: {
 			size: "4x4",
-			comodin: [4, 5],
+			comodin: [1],
 			comodinPosition: [
 				{
-					figureId: 4,
-					positions: [0],
+					figureId: 1,
+					positions: [0, 3],
 				},
-				{
-					figureId: 4,
-					positions: [0, 12, 15],
-				},
-				{
-					figureId: 5,
-					positions: [5],
-				},
-				{
-					figureId: 5,
-					positions: [5, 9, 10],
-				},
+
+
 			],
+			random: false,
 		},
 	},
 ];

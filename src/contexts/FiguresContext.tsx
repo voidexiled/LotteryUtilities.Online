@@ -18,7 +18,21 @@ export const FiguresProvider = ({ children }: any) => {
 	};
 
 	const removeFigure = (id: number) => {
-		setFigures(figures.filter((f) => f.id !== id));
+		const oldFigures = [...figures];
+		const indexOfFigure = oldFigures.findIndex((f) => f.id === id);
+
+		const newFigures = oldFigures.map((f, i) => {
+			if (i !== indexOfFigure) {
+				if (i < indexOfFigure) {
+					return f;
+				}
+
+				return { ...f, id: f.id - 1 };
+			}
+		})
+
+		console.log(newFigures);
+		setFigures(newFigures.filter((f) => f !== undefined && f !== null) as Figure[]);
 	};
 
 	const updateFigure = (figure: Figure) => {

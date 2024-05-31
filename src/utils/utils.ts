@@ -2,7 +2,11 @@ import { createCanvas, loadImage } from "canvas";
 import clsx from "clsx";
 import type { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { generateRandomMatrix, getRandom } from "./tables";
+import {
+	generateContinousMatrix,
+	generateRandomMatrix,
+	getRandom,
+} from "./tables";
 
 import type { Figure, Profile, Table, TableOptions } from "@/vite-env";
 import { v4 as uuidv4 } from "uuid";
@@ -10,31 +14,24 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
+type randomTableReturnType = Promise<{
+	table: Table;
+	candidates: Set<number>;
+}>;
+
 export async function generateRandomTable(
 	profile: Profile,
 	figures: Figure[],
 	n: number,
 	min: number,
 	max: number,
-): Promise<Table> {
+	lastestCandidates?: Set<number>,
+): randomTableReturnType {
+	let currentCandidates: Set<number> = lastestCandidates ?? new Set();
 	const customPositionsComodin = profile.tableOptions.comodinPosition;
+
 	const tableSize: number = profile.tableOptions.size === "4x4" ? 4 : 5;
 
-	// let tableIndex = 0;
-	// let tablesLength = tables.length;
-	// let lastTableId = 0;
-	// if (tablesLength > 0) {
-	// 	lastTableId = tables[tablesLength - 1].id;
-	// }
-	// let shouldPlusToIndex: boolean = lastTableId === tableIndex;
-
-	// while (shouldPlusToIndex) {
-	// 	lastTableId++;
-	// 	tableIndex++;
-	// 	shouldPlusToIndex = lastTableId === tableIndex;
-	// }
-
-	// console.log(tableIndex);
 	const tableIndex = uuidv4();
 	const options: TableOptions = {
 		size: profile.tableOptions.size,
@@ -47,17 +44,32 @@ export async function generateRandomTable(
 		imageURL: "",
 		options: options,
 	};
-
+	let matrix: number[][] = [];
 	const figuresToSkip = profile.tableOptions.comodin || undefined; // Omitimos los comodines en la generacion de la matriz
-	const matrix = generateRandomMatrix(n, min, max, figuresToSkip);
+	if (profile.tableOptions.random) {
+		matrix = generateRandomMatrix(n, min, max, figuresToSkip);
+	} else {
+		const { matrix: newMatr, candidates } = generateContinousMatrix(
+			n,
+			min,
+			max,
+			figuresToSkip,
+			currentCandidates,
+		);
+		matrix = newMatr;
+		currentCandidates = candidates;
+	}
+
 	const newMatrix: number[][] = []; // creamos una matriz vacia de numeros en la que modificaremos para insertar los comodines en sus posiciones especificadas en el profile
 	let figuresInTable: (Figure | undefined)[][]; // Aqui convertiremos la number[][] en Figure[][] al final de la insercion de los comodines
-
 	if (customPositionsComodin) {
+		console.log(customPositionsComodin);
 		const matrixFlat = matrix.flat(); // Operaremos con la matriz en flat
+		console.log(matrixFlat);
 		const usedOnes: number[] = []; // Aqui guardaremos los numeros que ya se han usado (indices de la matriz)
 		// Esto se itera por cada comodin que hay que tomar en cuenta
 		customPositionsComodin.map((customPosition) => {
+			console.log(customPosition);
 			//* 	Cuando hablamos de "positions" hablamos del index en la matrixFlat 	*//
 			const min = Math.min(...customPosition.positions); // El minimo y el maximo numero que existe en las posiciones del comodin en cuestión
 			const max = Math.max(...customPosition.positions);
@@ -68,7 +80,6 @@ export async function generateRandomTable(
 
 			do {
 				randomChoice = getRandom(min, max);
-
 				// Re asignación de las variables logicas después de generar un nuevo randomChoice
 				isUsed = usedOnes.includes(randomChoice);
 				positionIsValid = !customPosition.positions.includes(randomChoice);
@@ -83,6 +94,7 @@ export async function generateRandomTable(
 		// Convertimos la matrixFlat: number[] en matrix: number[][]
 		for (let i = 0; i < matrixFlat.length; i += tableSize) {
 			const row: number[] = matrixFlat.slice(i, i + tableSize);
+			console.log(row);
 			newMatrix.push(row);
 		}
 
@@ -100,8 +112,8 @@ export async function generateRandomTable(
 	newTable.options.figures = figuresInTable as Figure[][];
 
 	newTable.imageURL = await getURLImage(newTable);
-
-	return newTable;
+	console.log(currentCandidates);
+	return { table: newTable, candidates: currentCandidates };
 }
 
 export async function generateTableImage(table: Table) {
@@ -141,15 +153,18 @@ export async function generateTableImage(table: Table) {
 }
 export async function getURLImage(table: Table) {
 	const url = await generateTableImage(table).then((canvas) => {
-		return canvas.toDataURL();
+		return canvas.toDataURL("image/jpeg", 0.5);
 	});
 	return url;
 }
 
 export async function uploadImage(file: File) {
 	if (!file.type.includes("image")) return;
-	const canvasWidth: number = 800 / 4;
-	const canvasHeight: number = 1200 / 4;
+	// relation of 0.6324200913242009
+	// so h = w * 0.6324200913242009
+	// so w = h / 0.6324200913242009
+	const canvasWidth: number = 277;
+	const canvasHeight: number = 438;
 
 	const canvas = createCanvas(canvasWidth, canvasHeight);
 	const ctx = canvas.getContext("2d");

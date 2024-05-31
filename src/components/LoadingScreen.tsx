@@ -28,11 +28,11 @@ export const LoadingScreen = () => {
 			className={cn(
 				"hidden",
 				loading &&
-					"fixed grid w-screen h-screen top-0 left-0 bg-base-100 bg-opacity-70 z-50 grid-flow-row gap-3 disabled-select",
+					"disabled-select fixed top-0 left-0 z-50 grid h-screen w-screen grid-flow-row gap-3 bg-base-100 bg-opacity-70",
 			)}
 		>
 			<div className="m-auto flex flex-col gap-8">
-				<span className="loading loading-bars loading-lg m-auto bg-gradient-to-r from-primary via-accent to-secondary text-transparent animate-gradient text-4xl scale-150" />
+				<span className="loading loading-bars loading-lg m-auto scale-150 animate-gradient bg-gradient-to-r from-primary via-accent to-secondary text-4xl text-transparent" />
 				{loading && (
 					<span className="opacity-80">
 						Cargando{" "}

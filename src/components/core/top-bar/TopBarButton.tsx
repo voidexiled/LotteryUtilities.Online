@@ -1,6 +1,7 @@
 import { cn } from "@/utils/utils";
 
 type TopBarButtonProps = {
+	onClick?: () => void;
 	value?: string;
 	className?: string;
 	isIcon?: boolean;
@@ -13,11 +14,13 @@ export const TopBarButton = ({
 	className,
 	isIcon,
 	iconRenderer,
+	onClick,
 	iconPosition = "start",
 }: TopBarButtonProps) => {
 	return (
 		<button
 			type="button"
+			onClick={onClick}
 			className={cn(
 				"btn btn-sm inline-flex",
 				className,
