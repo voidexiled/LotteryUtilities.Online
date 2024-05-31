@@ -22,7 +22,7 @@ export const Header = () => {
 	const { profile } = useContext(ProfileContext) as ProfileContextType;
 
 	const handlePrint = async () => {
-		new Promise((resolve, reject) => {
+		new Promise((resolve) => {
 			const options = profile.pdfOptions;
 			const doc = new jsPDF({
 				orientation: "p",

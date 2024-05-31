@@ -3,7 +3,7 @@ import { FiguresContext } from "@/contexts/FiguresContext";
 import { uploadImage } from "@/utils/utils";
 import type { Figure, FiguresContextType } from "@/vite-env";
 import { Dropzone, type ExtFile, FileMosaic } from "@files-ui/react";
-import { Button, Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
+import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from "@headlessui/react";
 import { CheckIcon, UploadCloudIcon, XCircleIcon } from "lucide-react";
 import { useContext, useState } from "react";
 import { Flip, toast } from "react-toastify";
