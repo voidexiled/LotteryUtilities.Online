@@ -43,7 +43,7 @@ export const FigureEditable = ({
 		}
 	}, [selectedFigure, currentFigure, index]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+
 	useEffect(() => {
 		setSelectedFigure(null);
 		setIsSelected(false);
@@ -89,7 +89,7 @@ export const FigureEditable = ({
 						const newFigures = currentTable.options.figures.flat();
 
 						const copyOfCurrentFigure = currentFigure;
-						const copyOfSelectedFigure = selectedFigure.figure;
+						// const copyOfSelectedFigure = selectedFigure.figure;
 
 						newFigures[index] = selectedFigure.figure;
 						newFigures[selectedFigure.index] = copyOfCurrentFigure;

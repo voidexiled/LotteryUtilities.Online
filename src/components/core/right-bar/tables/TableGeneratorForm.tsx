@@ -8,7 +8,7 @@ import type {
     Table,
     TablesContextType
 } from "@/vite-env";
-import { Trash2Icon, X, XCircle, XCircleIcon } from "lucide-react";
+import { Trash2Icon, XCircleIcon } from "lucide-react";
 import {
     CheckIcon
 } from "lucide-react";
