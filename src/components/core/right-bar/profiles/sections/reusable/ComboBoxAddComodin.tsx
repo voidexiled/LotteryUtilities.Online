@@ -29,7 +29,6 @@ export function ComboBoxAddComodin() {
 	const { localProfile, setLocalProfile } = useContext(
 		ProfileContext,
 	) as ProfileContextType;
-	const { figures } = useContext(FiguresContext) as FiguresContextType;
 	const [open, setOpen] = useState(false);
 	const isDesktop = useMediaQuery("(min-width: 768px)");
 	const [selectedFigure, setSelectedFigure] = useState<Figure | null>(null);

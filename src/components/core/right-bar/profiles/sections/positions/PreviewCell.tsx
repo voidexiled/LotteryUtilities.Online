@@ -1,6 +1,6 @@
 import { ProfileContext } from "@/contexts/ProfileContext";
 import { cn } from "@/utils/utils";
-import type { FigurePosition, Profile, ProfileContextType } from "@/vite-env";
+import type { FigurePosition, ProfileContextType } from "@/vite-env";
 import { useContext, useEffect, useState } from "react";
 
 type PreviewCellProps = {
@@ -20,9 +20,7 @@ export const PreviewCell = ({
 	...props
 }: PreviewCellProps) => {
 	const [isActive, setActive] = useState(false);
-	const [comodinStorage, setComodinStorage] = useState<FigurePosition[] | null>(
-		[],
-	);
+
 	const { selectedComodin, setSelectedComodin, localProfile, setLocalProfile } =
 		useContext(ProfileContext) as ProfileContextType;
 

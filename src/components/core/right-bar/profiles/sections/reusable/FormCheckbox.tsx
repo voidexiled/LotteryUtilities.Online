@@ -1,5 +1,4 @@
 import { cn } from "@/utils/utils";
-import type { ReactEventHandler } from "react";
 
 type ProfileInputProps = {
 	id?: string;

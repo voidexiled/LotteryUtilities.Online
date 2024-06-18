@@ -1,6 +1,5 @@
 import { cn } from "@/utils/utils";
-import type { FigurePosition, Profile } from "@/vite-env";
-import { useState } from "react";
+import type { FigurePosition } from "@/vite-env";
 import { PreviewCell } from "./PreviewCell";
 
 type PreviewPositionsProps = {

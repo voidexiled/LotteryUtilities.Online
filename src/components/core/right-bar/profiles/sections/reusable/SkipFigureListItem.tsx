@@ -1,6 +1,6 @@
 import { ProfileContext } from "@/contexts/ProfileContext";
 import { cn } from "@/utils/utils";
-import type { Figure, FigurePosition, ProfileContextType } from "@/vite-env";
+import type { Figure, ProfileContextType } from "@/vite-env";
 import { motion } from "framer-motion";
 import { TrashIcon } from "lucide-react";
 import { useContext } from "react";

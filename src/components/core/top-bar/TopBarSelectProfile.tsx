@@ -7,7 +7,6 @@ import {
 } from "@headlessui/react";
 import { ChevronDown } from "lucide-react";
 
-import { DEFAULT_PROFILES } from "@/consts/ProfileConsts";
 import { ProfileContext } from "@/contexts/ProfileContext";
 import type { ProfileContextType } from "@/vite-env";
 import { type LegacyRef, forwardRef, useContext } from "react";
