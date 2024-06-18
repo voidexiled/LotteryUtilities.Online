@@ -20,6 +20,8 @@ export function generateRandomMatrix(
 				//   randomNum = getRandom(min, max);
 				// }
 				randomNum = getRandom(min, max, row[row.length - 1]);
+				// console.log("randomNum", randomNum);
+				// console.log("skipvalues", skip);	
 			} while (skip?.includes(randomNum) || usedValues.has(randomNum)); // Verificamos si el valor ya fue usado
 			usedValues.add(randomNum); // Agregamos el valor usado al Set
 			row.push(randomNum);
@@ -43,10 +45,10 @@ export function generateContinousMatrix(
 	lastCandidates?: Set<number>,
 ): continousMatrixReturnType {
 	const matrix: number[][] = [];
-	console.log(lastCandidates);
+
+	const usedValues = new Set<number>(); // Usamos un Set para rastrear los valores usados
+
 	let candidates = lastCandidates ?? refillCandidates(min, max);
-	console.log(candidates);
-	console.log(candidates.size);
 	candidates =
 		candidates.size === 0 ? shuffleSet(refillCandidates(min, max)) : candidates;
 	for (let x = 0; x < n; x++) {
@@ -54,25 +56,36 @@ export function generateContinousMatrix(
 		for (let y = 0; y < n; y++) {
 			let randomNumber: number;
 			do {
-				console.log("size: ", candidates.size);
 				if (candidates.size === 0) {
 					candidates = shuffleSet(refillCandidates(min, max));
-					console.log("refill");
 				}
+				
 				randomNumber = getRandomFromSet(candidates, row[row.length - 1]);
-			} while (skip?.includes(randomNumber));
+
+				if (candidates.size === 1 && usedValues.has(randomNumber)) {
+					candidates = shuffleSet(refillCandidates(min, max));
+					randomNumber = getRandomFromSet(candidates, row[row.length - 1]);
+				}
+				if (skip) {
+					skip.map((skipValue) => {
+						if (candidates.has(skipValue)) {
+							candidates.delete(skipValue);
+						}
+					});
+				}
+			} while (skip?.includes(randomNumber) || usedValues.has(randomNumber));
+			usedValues.add(randomNumber);
 			candidates.delete(randomNumber);
 			row.push(randomNumber);
 		}
 		matrix.push(row);
 	}
-	console.log(candidates);
 	return { matrix, candidates };
 }
 
 function refillCandidates(min: number, max: number): Set<number> {
 	const newCandidates = new Set<number>();
-	for (let i = min; i < max; i++) {
+	for (let i = min; i <= max; i++) {
 		newCandidates.add(i);
 	}
 	return newCandidates;

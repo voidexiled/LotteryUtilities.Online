@@ -1,20 +1,24 @@
 import type { ReactNode } from "react";
 import { FiguresContext } from "./contexts/FiguresContext";
 /// <reference types="vite/client" />
+
+export type PaperSize = "A4" | "A5" | "A6" | "Letter" | "Legal";
+
 export type TableSize = {
 	width: number;
 	height: number;
 };
 
 export type TableOptionsProfile = {
-	size: "4x4" | "5x5";
+	size: "2x2"|"4x4" | "5x5";
 	comodin: number[] | null;
-	comodinPosition: { figureId: number; positions: number[] }[] | null;
+	comodinPosition: FigurePosition[] | null;
 	random?: boolean;
+	skipFigures?: number[] | null;
 };
 
 export type PDFOptionsProfile = {
-	paperSize: string;
+	paperSize: PaperSize;
 	tableSize: TableSize;
 };
 
@@ -48,8 +52,18 @@ export type ToolsContextType = {
 };
 
 export type ProfileContextType = {
-	setProfile: (profile: Profile) => void;
+	setProfile: (name: string) => void;
 	profile: Profile;
+	updateProfile: (profileName: string, profile: Profile) => void;
+	profiles: Profile[];
+	addProfile: (profile: Profile) => void;
+	deleteProfile: (name: string) => void;
+	selectedComodin: FigurePosition | null;
+	setSelectedComodin: (figurePosition: FigurePosition | null) => void;
+	localProfile: Profile | null;
+	setLocalProfile: (profile: Profile | null) => void;
+	// setFallbackProfile: (profile: Profile | null) => void;
+	// fallbackProfile: Profile | null;
 };
 
 export type TablesContextType = {
@@ -92,11 +106,13 @@ export type Figure = {
 };
 
 export type FigurePosition = {
+	id: number;
 	figureId: number;
-};
+	positions: number[];
+} ;
 
 export type TableOptions = {
-	size: "4x4" | "5x5";
+	size: "2x2" | "4x4" | "5x5";
 	figures: Figure[][];
 };
 

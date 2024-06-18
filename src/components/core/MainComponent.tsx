@@ -1,6 +1,10 @@
 import "../../styles/cmdk.css";
 
-import type { FiguresContextType, FlagsContextType, TablesContextType } from "@/vite-env";
+import type {
+	FiguresContextType,
+	FlagsContextType,
+	TablesContextType,
+} from "@/vite-env";
 import { useContext, useEffect, useState } from "react";
 
 import { TablesContext } from "@/contexts/TablesContext";
@@ -22,7 +26,14 @@ import {
 	useKmenu,
 } from "kmenu";
 import type { CategoryCommand } from "kmenu/dist/types";
-import { BoxesIcon, CheckIcon, FolderCog2Icon, ImagePlay, ListRestartIcon, UserCog2Icon } from "lucide-react";
+import {
+	BoxesIcon,
+	CheckIcon,
+	FolderCog2Icon,
+	ImagePlay,
+	ListRestartIcon,
+	UserCog2Icon,
+} from "lucide-react";
 import { FigureManagerToolDialog } from "./tools/FigureManagerToolDialog";
 
 export const MainComponent = () => {
@@ -34,12 +45,16 @@ export const MainComponent = () => {
 		FiguresContext,
 	) as FiguresContextType;
 
+	const {
+		showProfiles,
+		showFigures,
+		showTables,
+		setShowProfiles,
+		setShowFigures,
+		setShowTables,
+	} = useContext(FlagsContext) as FlagsContextType;
 
-	const { showProfiles, showFigures, showTables, setShowProfiles, setShowFigures, setShowTables } = useContext(FlagsContext) as FlagsContextType;
-
-
-	const [isOpenDialog, setIsOpenDialog] = useState(false);
-
+	const [isOpenDropzoneDialog, setIsOpenDropzoneDialog] = useState(false);
 
 	const templateSettingsCommands: CategoryCommand[] = [
 		{
@@ -47,20 +62,23 @@ export const MainComponent = () => {
 			text: `${showProfiles ? "Ocultar" : "Mostrar"} conf. de perfiles`,
 			keywords: "mostrar perfiles",
 			perform: () => toggleShowProfiles(),
+			shortcuts: { modifier: "ctrl", keys: ["alt", "p"] },
 		},
 		{
 			icon: <FolderCog2Icon />,
 			text: `${showFigures ? "Ocultar" : "Mostrar"} conf. de figuras`,
 			keywords: "mostrar figuras",
 			perform: () => toggleShowFigures(),
+			shortcuts: { modifier: "ctrl", keys: ["alt", "f"] },
 		},
 		{
 			icon: <BoxesIcon />,
 			text: `${showTables ? "Ocultar" : "Mostrar"} conf. de tablas`,
 			keywords: "mostrar tablas",
 			perform: () => toggleShowTables(),
-		}
-	]
+			shortcuts: { modifier: "ctrl", keys: ["alt", "t"] },
+		},
+	];
 
 	const notifyEnabledUi = (message: string) => {
 		toast(message, {
@@ -70,7 +88,7 @@ export const MainComponent = () => {
 			bodyStyle: { fontSize: "0.75rem" },
 			icon: <CheckIcon className="h-4 w-4" />,
 		});
-	}
+	};
 
 	const mainCommands: Command[] = [
 		{
@@ -87,7 +105,7 @@ export const MainComponent = () => {
 		},
 		{
 			category: "Configuración",
-			commands: templateSettingsCommands
+			commands: templateSettingsCommands,
 		},
 		{
 			category: "Restablecer",
@@ -99,46 +117,53 @@ export const MainComponent = () => {
 					perform: () => {
 						setFigures(DEFAULT_FIGURES);
 						notifyEnabledUi("Se han restablecido las figuras correctamente.");
-					}
-				}
-			]
-		}
-	];
-
-	const toggleShowProfiles = () => {
-		if (showFigures || showTables) {
-
-
-			setShowProfiles(!showProfiles);
-			notifyEnabledUi(`Se ha ${showProfiles ? "ocultado" : "habilitado"} la configuración de perfiles.`);
-		}
-	}
-	const toggleShowFigures = () => {
-		if (showProfiles || showTables) {
-			setShowFigures(!showFigures);
-			notifyEnabledUi(`Se ha ${showFigures ? "ocultado" : "habilitado"} la configuración de figuras.`);
-		}
-	}
-	const toggleShowTables = () => {
-		if (showProfiles || showFigures) {
-			setShowTables(!showTables);
-			notifyEnabledUi(`Se ha ${showTables ? "ocultado" : "habilitado"} la configuración de tablas.`);
-		}
-	}
-
-	const commandsFigureSelector: Command[] = [
-		{
-			category: "Figuras",
-			commands: [
-
+					},
+				},
 			],
 		},
 	];
 
+	const toggleShowProfiles = () => {
+		if (showFigures || showTables) {
+			setShowProfiles(!showProfiles);
+			notifyEnabledUi(
+				`Se ha ${
+					showProfiles ? "ocultado" : "habilitado"
+				} la configuración de perfiles.`,
+			);
+		}
+	};
+	const toggleShowFigures = () => {
+		if (showProfiles || showTables) {
+			setShowFigures(!showFigures);
+			notifyEnabledUi(
+				`Se ha ${
+					showFigures ? "ocultado" : "habilitado"
+				} la configuración de figuras.`,
+			);
+		}
+	};
+	const toggleShowTables = () => {
+		if (showProfiles || showFigures) {
+			setShowTables(!showTables);
+			notifyEnabledUi(
+				`Se ha ${
+					showTables ? "ocultado" : "habilitado"
+				} la configuración de tablas.`,
+			);
+		}
+	};
+
+	const commandsFigureSelector: Command[] = [
+		{
+			category: "Figuras",
+			commands: [],
+		},
+	];
+
 	const [rootCommands, setRootCommands] = useCommands(mainCommands);
-	const [toolFigureSelectorCommands, setToolFigureSelectorCommands] = useCommands(
-		commandsFigureSelector,
-	);
+	const [toolFigureSelectorCommands, setToolFigureSelectorCommands] =
+		useCommands(commandsFigureSelector);
 
 	useEffect(() => {
 		setRootCommands(mainCommands);
@@ -165,11 +190,9 @@ export const MainComponent = () => {
 		}
 	}, [showTables]);
 
-
 	useEffect(() => {
 		const figs = figures.map((fig) => {
 			const cmd: CategoryCommand = {
-
 				text: `${fig.name.toUpperCase()}`,
 				keywords: fig.name.split(" ").join(","),
 				perform: () => setCurrentFigure(fig),
@@ -180,15 +203,44 @@ export const MainComponent = () => {
 		setToolFigureSelectorCommands(commandsFigureSelector);
 	}, [figures]);
 
-
 	useEffect(() => {
 		const keyManagerListener = (e: KeyboardEvent) => {
-			if (e.key === "f" && e.ctrlKey) {
+			// ALT + S ( SELECTOR DE FIGURAS )
+			if (e.key === "" && (e.ctrlKey || e.metaKey || e.altKey)) {
+				return false;
+			}
+			if (e.key === "s" && e.ctrlKey) {
 				e.preventDefault();
 				e.stopPropagation();
 				setOpen(2);
 			}
 
+			// ALT + P ( Configuracion DE PROFILE )
+			if (e.key === "p" && e.ctrlKey) {
+				e.preventDefault();
+				e.stopPropagation();
+				setShowProfiles(true);
+				setOpen(0);
+				console.log(showProfiles);
+			}
+
+			// ALT + F ( Configuracion DE FIGURAS )
+			if (e.key === "f" && e.ctrlKey) {
+				e.preventDefault();
+				e.stopPropagation();
+				setShowFigures(true);
+				setOpen(0);
+			}
+
+			// ALT + T ( Configuracion DE TABLAS )
+			if (e.key === "t" && e.ctrlKey) {
+				e.preventDefault();
+				e.stopPropagation();
+				setShowTables(true);
+				setOpen(0);
+			}
+
+			// close the command search
 			if (open > 0 && e.key === "Escape") {
 				e.preventDefault();
 				e.stopPropagation();
@@ -197,7 +249,6 @@ export const MainComponent = () => {
 		};
 
 		document.addEventListener("keydown", keyManagerListener);
-
 
 		return () => {
 			document.removeEventListener("keydown", keyManagerListener);
@@ -233,10 +284,13 @@ export const MainComponent = () => {
 						commands={toolFigureSelectorCommands}
 						crumbs={["Comandos", "Figuras"]}
 						index={2}
-
 					/>
 				</CommandWrapper>
-				<FigureManagerToolDialog isOpen={isOpenDialog} setIsOpen={setIsOpenDialog} />
+				<FigureManagerToolDialog
+					isOpen={isOpenDropzoneDialog}
+					setIsOpen={setIsOpenDropzoneDialog}
+				/>
+
 				<div className="fixed right-2 bottom-4 z-50 flex h-12 flex-col gap-2 p-4 lg:hidden">
 					<button
 						type="button"

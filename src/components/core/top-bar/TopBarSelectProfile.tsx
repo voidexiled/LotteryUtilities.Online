@@ -17,7 +17,7 @@ const SelectProfileInput = forwardRef(
 		<button
 			type="button"
 			ref={ref}
-			className="btn btn-sm min-w-[130px] max-w-[180px] justify-between"
+			className="btn btn-sm min-w-[130px] max-w-[180px] flex-nowrap justify-between"
 			{...props}
 		/>
 	),
@@ -26,14 +26,14 @@ const SelectProfileOption = forwardRef(
 	(props, ref: LegacyRef<HTMLButtonElement>) => (
 		<button
 			ref={ref}
-			className="btn btn-sm justify-start text-left text-xs"
+			className="btn btn-sm flex-nowrap justify-start text-left text-xs"
 			{...props}
 		/>
 	),
 );
 
 export const TopBarSelectProfile = () => {
-	const { profile, setProfile } = useContext(
+	const { profile, setProfile, profiles } = useContext(
 		ProfileContext,
 	) as ProfileContextType;
 
@@ -41,16 +41,18 @@ export const TopBarSelectProfile = () => {
 		<Listbox
 			value={profile}
 			onChange={(e) => {
-				const profile = DEFAULT_PROFILES.find(
+				const profile = profiles.find(
 					(profile) => profile.name === (e as unknown as string),
 				);
 				if (!profile) return;
-				setProfile(profile);
+				setProfile(profile.name);
 			}}
 		>
 			<ListboxButton as={SelectProfileInput}>
-				{profile.name}
-				<ChevronDown className="ml-2 h-4 w-4 text-accent" />
+				<span className="flex-[3] overflow-hidden text-ellipsis text-nowrap">
+					{profile.name}
+				</span>
+				<ChevronDown className="ml-2 flex min-h-4 min-w-4 flex-[1] text-accent" />
 			</ListboxButton>
 			<Transition
 				enter="duration-300 ease-out"
@@ -64,14 +66,16 @@ export const TopBarSelectProfile = () => {
 					anchor="bottom start"
 					className="flex w-[180px] origin-top flex-col gap-1 rounded-lg bg-base-200 px-2 py-1 shadow-base-200/20 shadow-lg transition"
 				>
-					{DEFAULT_PROFILES.map((profile) => {
+					{profiles.map((profile) => {
 						return (
 							<ListboxOption
 								as={SelectProfileOption}
 								key={profile.name}
 								value={profile.name}
 							>
-								{profile.name}
+								<span className="overflow-hidden text-ellipsis text-nowrap">
+									{profile.name}
+								</span>
 							</ListboxOption>
 						);
 					})}

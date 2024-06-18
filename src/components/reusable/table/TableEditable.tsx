@@ -20,9 +20,10 @@ export const TableEditable = () => {
 	useEffect(() => {
 		if (currentTable) {
 			if (currentTable.options.size) {
-				setSize(currentTable.options.size === "4x4" ? 4 : 5);
+				setSize(currentTable.options.size.charAt(0) as unknown as number);
 			}
 		}
+		console.log(size);
 	}, [currentTable]);
 	return (
 		<>

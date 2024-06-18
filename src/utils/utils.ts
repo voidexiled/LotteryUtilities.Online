@@ -16,8 +16,9 @@ export function cn(...inputs: ClassValue[]) {
 
 type randomTableReturnType = Promise<{
 	table: Table;
-	candidates: Set<number>;
 }>;
+
+let currentCandidates: Set<number> = new Set();
 
 export async function generateRandomTable(
 	profile: Profile,
@@ -25,9 +26,7 @@ export async function generateRandomTable(
 	n: number,
 	min: number,
 	max: number,
-	lastestCandidates?: Set<number>,
 ): randomTableReturnType {
-	let currentCandidates: Set<number> = lastestCandidates ?? new Set();
 	const customPositionsComodin = profile.tableOptions.comodinPosition;
 
 	const tableSize: number = profile.tableOptions.size === "4x4" ? 4 : 5;
@@ -45,7 +44,20 @@ export async function generateRandomTable(
 		options: options,
 	};
 	let matrix: number[][] = [];
-	const figuresToSkip = profile.tableOptions.comodin || undefined; // Omitimos los comodines en la generacion de la matriz
+
+	let figuresToSkip: number[] | undefined = undefined;
+
+	if (profile.tableOptions.comodin) {
+		figuresToSkip = [...profile.tableOptions.comodin];
+	}
+	if (profile.tableOptions.skipFigures) {
+		if (profile.tableOptions.comodin) {
+			figuresToSkip = figuresToSkip?.concat(profile.tableOptions.skipFigures);
+		} else {
+			figuresToSkip = profile.tableOptions.skipFigures;
+		}
+	}
+
 	if (profile.tableOptions.random) {
 		matrix = generateRandomMatrix(n, min, max, figuresToSkip);
 	} else {
@@ -58,18 +70,17 @@ export async function generateRandomTable(
 		);
 		matrix = newMatr;
 		currentCandidates = candidates;
+		// should generate a matrix with 54 figure set
 	}
 
 	const newMatrix: number[][] = []; // creamos una matriz vacia de numeros en la que modificaremos para insertar los comodines en sus posiciones especificadas en el profile
 	let figuresInTable: (Figure | undefined)[][]; // Aqui convertiremos la number[][] en Figure[][] al final de la insercion de los comodines
 	if (customPositionsComodin) {
-		console.log(customPositionsComodin);
 		const matrixFlat = matrix.flat(); // Operaremos con la matriz en flat
-		console.log(matrixFlat);
 		const usedOnes: number[] = []; // Aqui guardaremos los numeros que ya se han usado (indices de la matriz)
 		// Esto se itera por cada comodin que hay que tomar en cuenta
 		customPositionsComodin.map((customPosition) => {
-			console.log(customPosition);
+			if (customPosition.positions.length === 0) return; // Si no hay posiciones, no hacemos nada
 			//* 	Cuando hablamos de "positions" hablamos del index en la matrixFlat 	*//
 			const min = Math.min(...customPosition.positions); // El minimo y el maximo numero que existe en las posiciones del comodin en cuestión
 			const max = Math.max(...customPosition.positions);
@@ -94,7 +105,6 @@ export async function generateRandomTable(
 		// Convertimos la matrixFlat: number[] en matrix: number[][]
 		for (let i = 0; i < matrixFlat.length; i += tableSize) {
 			const row: number[] = matrixFlat.slice(i, i + tableSize);
-			console.log(row);
 			newMatrix.push(row);
 		}
 
@@ -112,12 +122,16 @@ export async function generateRandomTable(
 	newTable.options.figures = figuresInTable as Figure[][];
 
 	newTable.imageURL = await getURLImage(newTable);
-	console.log(currentCandidates);
-	return { table: newTable, candidates: currentCandidates };
+
+	return { table: newTable };
+}
+
+export async function resetCandidates() {
+	currentCandidates = new Set();
 }
 
 export async function generateTableImage(table: Table) {
-	const size = table.options.size.charAt(0) === "4" ? 4 : 5;
+	const size = table.options.size.charAt(0) as unknown as number;
 	const canvasWidth: number = 800;
 	const canvasHeight: number = 1200;
 
@@ -136,7 +150,7 @@ export async function generateTableImage(table: Table) {
 
 	for (let i = 0; i < flatFigures.length; i++) {
 		const figure = flatFigures[i];
-		const img = await loadImage(figure.imageURL);
+		const img = await loadImage(figure.imageURL as unknown as string);
 		ctx.drawImage(img, currentX, currentY, imgWidth, imgHeight);
 
 		ctx.strokeStyle = "#000";
@@ -149,8 +163,47 @@ export async function generateTableImage(table: Table) {
 			currentY += imgHeight;
 		}
 	}
+	ctx.strokeStyle = "#000";
+	ctx.lineWidth = 4;
+	ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
 	return canvas;
 }
+
+export async function generateHeaderImage(figure: Figure) {
+	const font = new FontFace("Lato", "url(https://fonts.gstatic.com/s/lato/v20/SfLato-Regular.ttf)");
+	font.stretch = "normal";
+	font.weight = "normal";
+	document.fonts.add(font);
+	const canvasWidth: number = 800;
+	const canvasHeight: number = 260;
+
+	// const imgWidth = canvasWidth / 5;
+	// const imgHeight = 1200 / 5;
+
+	const canvas = createCanvas(canvasWidth, canvasHeight);
+
+	const ctx = canvas.getContext("2d");
+	ctx.quality = "fast";
+	ctx.fillStyle = "white";
+	ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+	const imgSrc = figure.imageURL;
+
+	if (!imgSrc) return;
+	// const currentX = 0;
+	// const currentY = 0;
+	ctx.fillStyle = "#000";
+	ctx.font = "normal 90px Arial";
+	ctx.strokeStyle = "#000";
+	// ctx.strokeRect(currentX, currentY, canvasWidth/2, canvasHeight/2);
+	ctx.fillText("POZO ESPECIAL", canvasWidth / 4 - 150, canvasHeight / 2 + canvasHeight/8);
+	// const img = await loadImage(imgSrc);
+	// ctx.drawImage(img, canvasWidth-imgWidth-30, canvasHeight/2-imgHeight/2, imgWidth, imgHeight);
+	ctx.strokeStyle = "#000";
+	ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
+	return canvas;
+}
+
 export async function getURLImage(table: Table) {
 	const url = await generateTableImage(table).then((canvas) => {
 		return canvas.toDataURL("image/jpeg", 0.5);

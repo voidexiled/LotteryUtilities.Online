@@ -2,7 +2,13 @@ import { DEFAULT_TOOLS } from "@/consts/ToolsConsts";
 import { FiguresContext } from "@/contexts/FiguresContext";
 import { ToolsContext } from "@/contexts/ToolsContext";
 import { cn, getURLImage } from "@/utils/utils";
-import type { Figure, FiguresContextType, Table, TablesContextType, ToolsContextType } from "@/vite-env";
+import type {
+	Figure,
+	FiguresContextType,
+	Table,
+	TablesContextType,
+	ToolsContextType,
+} from "@/vite-env";
 import { motion } from "framer-motion";
 
 import { useContext, useEffect, useState } from "react";
@@ -16,7 +22,6 @@ type FigureEditableProps = {
 	updateTable: (table: Table) => void;
 };
 
-
 export const FigureEditable = ({
 	index,
 	tableSize,
@@ -27,7 +32,9 @@ export const FigureEditable = ({
 	updateTable,
 }: FigureEditableProps) => {
 	const { selectedTool } = useContext(ToolsContext) as ToolsContextType;
-	const { currentFigure: figurePaletteSelected } = useContext(FiguresContext) as FiguresContextType;
+	const { currentFigure: figurePaletteSelected } = useContext(
+		FiguresContext,
+	) as FiguresContextType;
 	const [isSelected, setIsSelected] = useState(
 		selectedFigure?.figure === currentFigure && selectedFigure.index === index,
 	);
@@ -43,12 +50,10 @@ export const FigureEditable = ({
 		}
 	}, [selectedFigure, currentFigure, index]);
 
-
 	useEffect(() => {
 		setSelectedFigure(null);
 		setIsSelected(false);
 	}, [currentTable]);
-
 
 	const handleClickFigure = async () => {
 		if (!selectedTool) return;
@@ -114,7 +119,7 @@ export const FigureEditable = ({
 				}
 			}
 		}
-	}
+	};
 
 	return (
 		<>
@@ -122,7 +127,9 @@ export const FigureEditable = ({
 				<div
 					className={cn(
 						"relative cursor-pointer",
-						tableSize === 4 ? "h-1/4 w-1/4" : "h-1/5 w-1/5",
+						Number(tableSize) === 2 && "h-1/2 w-1/2",
+						Number(tableSize) === 4 && "h-1/4 w-1/4",
+						Number(tableSize) === 5 && "h-1/5 w-1/5",
 					)}
 					onClick={handleClickFigure}
 				>
