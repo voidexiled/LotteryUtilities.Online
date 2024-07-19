@@ -40,6 +40,7 @@ export const ProfileForm = () => {
 	const [tableSize, setTableSize] = useState<string>(
 		localProfile?.tableOptions.size || "4x4",
 	);
+	//const [figurasAleatorias, setFigurasAleatorias] = useState<boolean>(false);
 
 	useEffect(() => {
 		// console.log("profile", profile);
@@ -230,6 +231,15 @@ export const ProfileForm = () => {
 					<FormCheckbox
 						label="Figuras aleatorias"
 						checked={localProfile.tableOptions.random}
+						onChange={(e) => {
+							setLocalProfile({
+								...localProfile,
+								tableOptions: {
+									...localProfile.tableOptions,
+									random: e.currentTarget.checked,
+								},
+							});
+						}}
 					/>
 				</FormWrapper>
 			</MainWrapper>

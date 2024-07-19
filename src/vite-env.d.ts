@@ -62,6 +62,8 @@ export type ProfileContextType = {
 	setSelectedComodin: (figurePosition: FigurePosition | null) => void;
 	localProfile: Profile | null;
 	setLocalProfile: (profile: Profile | null) => void;
+	selectedPosition: number | null;
+	setSelectedPosition: (position: number | null) => void;
 	// setFallbackProfile: (profile: Profile | null) => void;
 	// fallbackProfile: Profile | null;
 };

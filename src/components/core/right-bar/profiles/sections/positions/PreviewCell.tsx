@@ -1,13 +1,14 @@
 import { ProfileContext } from "@/contexts/ProfileContext";
 import { cn } from "@/utils/utils";
 import type { FigurePosition, ProfileContextType } from "@/vite-env";
+import clsx from "clsx";
 import { useContext, useEffect, useState } from "react";
 
 type PreviewCellProps = {
 	flatIndex: number;
 	tableSize: number;
 	figureId?: number | undefined | null;
-	occurrence?: FigurePosition | undefined;
+	occurrences?: FigurePosition[] | undefined;
 	className?: string;
 } & React.HTMLAttributes<HTMLDivElement>;
 
@@ -15,14 +16,20 @@ export const PreviewCell = ({
 	flatIndex,
 	tableSize,
 	figureId,
-	occurrence,
+	occurrences,
 	className,
 	...props
 }: PreviewCellProps) => {
 	const [isActive, setActive] = useState(false);
 
-	const { selectedComodin, setSelectedComodin, localProfile, setLocalProfile } =
-		useContext(ProfileContext) as ProfileContextType;
+	const {
+		selectedComodin,
+		setSelectedComodin,
+		localProfile,
+		setLocalProfile,
+		selectedPosition,
+		setSelectedPosition,
+	} = useContext(ProfileContext) as ProfileContextType;
 
 	const handleTogglePosition = (posFlatIndex: number) => {
 		if (!localProfile) return;
@@ -87,16 +94,47 @@ export const PreviewCell = ({
 			_localProfile.tableOptions.comodin.push(selectedComodin.figureId);
 		}
 		setLocalProfile(_localProfile);
+		setSelectedPosition(newPosition.id);
 		setSelectedComodin(newPosition);
 	};
 
 	useEffect(() => {
-		if (!occurrence) {
+		if (!selectedPosition) {
+			setActive(false);
+			return;
+		}
+
+		if (!occurrences || occurrences.length === 0) {
+			setActive(false);
+			return;
+		}
+
+		const targetPositions = occurrences.find(
+			(occ) => occ.id === selectedPosition,
+		);
+
+		if (!targetPositions || !targetPositions.positions.includes(flatIndex)) {
 			setActive(false);
 			return;
 		}
 		setActive(true);
-	}, [occurrence]);
+
+		// if (!occurrences || occurrences.length === 0) {
+		// 	setActive(false);
+		// 	return;
+		// }
+		// console.log(occurrences);
+		// occurrences.map((occ) => {
+		// 	console.log({
+		// 		occ,
+		// 		selectedPosition,
+		// 		flatIndex,
+		// 	});
+		// 	if (occ.id === selectedPosition && occ.positions.includes(flatIndex)) {
+		// 		setActive(true);
+		// 	}
+		// });
+	}, [occurrences, selectedPosition]);
 
 	return (
 		<div
@@ -132,7 +170,9 @@ export const PreviewCell = ({
 				// });
 			}}
 		>
-			<span className="m-auto">{occurrence?.id}</span>
+			<span className={clsx("m-auto", isActive ? "opacity-100" : "opacity-0")}>
+				{selectedPosition || ""}
+			</span>
 		</div>
 	);
 };

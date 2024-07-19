@@ -13,6 +13,7 @@ import { generateHeaderImage } from "@/utils/utils";
 import type {
 	Figure,
 	FiguresContextType,
+	FlagsContextType,
 	Profile,
 	ProfileContextType,
 	TablesContextType,
@@ -20,6 +21,7 @@ import type {
 import jsPDF from "jspdf";
 import { useContext } from "react";
 
+import { FlagsContext } from "@/contexts/FlagsContext";
 import { TopBarButton } from "./top-bar/TopBarButton";
 import { TopBarGroupButtons } from "./top-bar/TopBarGroupButtons";
 import { TopBarSelectProfile } from "./top-bar/TopBarSelectProfile";
@@ -33,6 +35,10 @@ export const Header = () => {
 	) as ProfileContextType;
 
 	const { figures } = useContext(FiguresContext) as FiguresContextType;
+
+	const { showProfiles, setShowTables, setShowProfiles } = useContext(
+		FlagsContext,
+	) as FlagsContextType;
 	// useEffect(() => {
 	// 	console.log(showProfiles);
 	// 	if (showProfiles) {
@@ -238,6 +244,13 @@ export const Header = () => {
 					<TopBarButton
 						iconRenderer={<SettingsIcon className="h-5 w-5 text-accent" />}
 						isIcon
+						onClick={() => {
+							if (showProfiles) {
+								setShowTables(true);
+							} else {
+								setShowProfiles(true);
+							}
+						}}
 					/>
 				</TopBarGroupButtons>
 			</div>

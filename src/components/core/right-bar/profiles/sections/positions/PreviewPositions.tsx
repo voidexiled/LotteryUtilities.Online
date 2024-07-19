@@ -30,11 +30,13 @@ export const PreviewPositions = ({
 			{...props}
 		>
 			{Array.from({ length: tableSizeNumber * tableSizeNumber }, (_, i) => {
-				const current = positions?.find((pos) => pos.positions.includes(i));
+				console.log("poses", positions);
+				const current = positions?.filter((pos) => pos.positions.includes(i));
+
 				console.log(i, current);
 				return (
 					<PreviewCell
-						occurrence={current}
+						occurrences={current}
 						flatIndex={i}
 						className="h-full w-full"
 						tableSize={tableSizeNumber}

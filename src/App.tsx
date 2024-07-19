@@ -7,7 +7,6 @@ function App() {
 	// try to load figures from local storage if available
 	// otherwise load to the local storage
 
-
 	return (
 		<div
 			className="flex w-screen flex-col bg-base-100 lg:h-screen lg:max-h-screen"
@@ -15,7 +14,6 @@ function App() {
 		>
 			<Header />
 			<MainComponent />
-
 		</div>
 	);
 }

@@ -140,7 +140,7 @@ export async function generateTableImage(table: Table) {
 
 	const canvas = createCanvas(canvasWidth, canvasHeight);
 	const ctx = canvas.getContext("2d");
-	ctx.quality = "fast";
+	ctx.quality = "best";
 	ctx.fillStyle = "white";
 	ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 	const flatFigures = table.options.figures.flat();
@@ -196,7 +196,7 @@ export async function generateHeaderImage(figure: Figure) {
 	ctx.font = "normal 90px Arial";
 	ctx.strokeStyle = "#000";
 	// ctx.strokeRect(currentX, currentY, canvasWidth/2, canvasHeight/2);
-	ctx.fillText("POZO ESPECIAL", canvasWidth / 4 - 150, canvasHeight / 2 + canvasHeight/8);
+	ctx.fillText("Tablita VIP", canvasWidth / 4 - 5, canvasHeight / 2 + canvasHeight/8 - 65);
 	// const img = await loadImage(imgSrc);
 	// ctx.drawImage(img, canvasWidth-imgWidth-30, canvasHeight/2-imgHeight/2, imgWidth, imgHeight);
 	ctx.strokeStyle = "#000";
@@ -206,7 +206,7 @@ export async function generateHeaderImage(figure: Figure) {
 
 export async function getURLImage(table: Table) {
 	const url = await generateTableImage(table).then((canvas) => {
-		return canvas.toDataURL("image/jpeg", 0.5);
+		return canvas.toDataURL("image/jpeg", 1);
 	});
 	return url;
 }
@@ -221,7 +221,7 @@ export async function uploadImage(file: File) {
 
 	const canvas = createCanvas(canvasWidth, canvasHeight);
 	const ctx = canvas.getContext("2d");
-	ctx.quality = "fast";
+	ctx.quality = "best";
 	const img = await loadImage(URL.createObjectURL(file));
 	ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
 	return canvas.toDataURL();

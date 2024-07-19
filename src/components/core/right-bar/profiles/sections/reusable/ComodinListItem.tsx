@@ -11,8 +11,13 @@ type FormListItemProps = {
 };
 
 export const ComodinListItem = ({ item, figure }: FormListItemProps) => {
-	const { selectedComodin, setSelectedComodin, localProfile, setLocalProfile } =
-		useContext(ProfileContext) as ProfileContextType;
+	const {
+		selectedComodin,
+		setSelectedComodin,
+		localProfile,
+		setLocalProfile,
+		setSelectedPosition,
+	} = useContext(ProfileContext) as ProfileContextType;
 	if (!item || !figure)
 		return (
 			<div className="flex h-14 grow flex-row items-center gap-5 overflow-hidden rounded-md bg-base-200 px-4 text-sm md:h-8">
@@ -68,10 +73,12 @@ export const ComodinListItem = ({ item, figure }: FormListItemProps) => {
 
 				if (selectedComodin?.id === item.id) {
 					setSelectedComodin(null);
+					setSelectedPosition(null);
 					return;
 				}
 
 				setSelectedComodin(item);
+				setSelectedPosition(item.id);
 			}}
 		>
 			<span className="w-4 grow">{`${item.id}`}</span>

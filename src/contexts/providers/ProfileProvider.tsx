@@ -10,12 +10,15 @@ export const ProfileProvider = ({ children }: any) => {
 	// const [fallbackProfile, setFallbackProfile] = useState<Profile | null>(null);
 	const [selectedComodinFromEdit, setSelectedComodinFromEdit] =
 		useState<FigurePosition | null>(null);
+	const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
 
 	useEffect(() => {
 		console.log("profile", profile);
 	}, [profile]);
 
 	const setProfile = (name: string) => {
+		//const profileToSet = profiles.find((p) => p.name === name);
+		//console.log("Perfil", profileToSet);
 		_setProfile(profiles.find((p) => p.name === name) || defaultProfile);
 	};
 
@@ -28,6 +31,7 @@ export const ProfileProvider = ({ children }: any) => {
 		});
 		console.log("newProfiles", newProfiles);
 		setProfiles(newProfiles);
+		console.log("profile", newProfile);
 		setProfile(newProfile.name);
 	};
 
@@ -38,6 +42,7 @@ export const ProfileProvider = ({ children }: any) => {
 	const deleteProfile = (name: string) => {
 		const newProfiles = profiles.filter((p) => p.name !== name);
 		setProfiles(newProfiles);
+		setProfile(newProfiles[newProfiles.length - 1].name);
 	};
 
 	useEffect(() => {
@@ -62,6 +67,10 @@ export const ProfileProvider = ({ children }: any) => {
 		trySaveProfiles();
 	}, [profiles]);
 
+	useEffect(() => {
+		console.log("selectedPosition", selectedPosition);
+	}, [selectedPosition]);
+
 	return (
 		<ProfileContext.Provider
 			value={{
@@ -77,6 +86,8 @@ export const ProfileProvider = ({ children }: any) => {
 				addProfile,
 				deleteProfile,
 				setSelectedComodin: setSelectedComodinFromEdit,
+				selectedPosition,
+				setSelectedPosition,
 			}}
 		>
 			{children}

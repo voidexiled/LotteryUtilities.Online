@@ -171,4 +171,21 @@ export const DEFAULT_PROFILES: Profile[] = [
 			skipFigures: null,
 		},
 	},
+	{
+		name: "Cinthia",
+		pdfOptions: {
+			paperSize: "A4",
+			tableSize: {
+				width: 7.4,
+				height: 12.7,
+			},
+		},
+		tableOptions: {
+			size: "4x4",
+			comodin: null,
+			comodinPosition: null,
+			random: true,
+			skipFigures: null,
+		},
+	},
 ];
