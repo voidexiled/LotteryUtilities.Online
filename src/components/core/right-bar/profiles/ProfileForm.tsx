@@ -106,7 +106,7 @@ export const ProfileForm = () => {
 			return;
 		}
 		console.log("localProfile", localProfile);
-		updateProfile(profile.name, localProfile);
+		updateProfile(profile.id, localProfile);
 		notifySuccess(`Se ha actualizado el perfil ${profile.name} correctamente.`);
 	};
 
@@ -116,13 +116,14 @@ export const ProfileForm = () => {
 			return;
 		}
 		const nameProfile = profile.name;
-		deleteProfile(profile.name);
+		deleteProfile(profile.id);
 		notifyDeleted(`Se ha eliminado el perfil ${nameProfile} correctamente.`);
 		const lenProfiles = profiles.length;
 		if (lenProfiles === 0) {
 			addProfile(defaultProfile);
 		} else {
-			setProfile(profiles[lenProfiles - 1].name);
+			// console.log("profiles", profiles[lenProfiles - 2]);
+			setProfile(profiles[0].id);
 		}
 	};
 

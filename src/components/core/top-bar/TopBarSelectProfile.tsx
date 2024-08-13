@@ -40,11 +40,12 @@ export const TopBarSelectProfile = () => {
 		<Listbox
 			value={profile}
 			onChange={(e) => {
+				console.log("macaco", e);
 				const profile = profiles.find(
-					(profile) => profile.name === (e as unknown as string),
+					(profile) => profile.id === (e as unknown as number),
 				);
 				if (!profile) return;
-				setProfile(profile.name);
+				setProfile(profile.id);
 			}}
 		>
 			<ListboxButton as={SelectProfileInput}>
@@ -69,8 +70,8 @@ export const TopBarSelectProfile = () => {
 						return (
 							<ListboxOption
 								as={SelectProfileOption}
-								key={profile.name}
-								value={profile.name}
+								key={profile.name + profile.id}
+								value={profile.id}
 							>
 								<span className="overflow-hidden text-ellipsis text-nowrap">
 									{profile.name}

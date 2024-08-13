@@ -16,34 +16,40 @@ export const ProfileProvider = ({ children }: any) => {
 		console.log("profile", profile);
 	}, [profile]);
 
-	const setProfile = (name: string) => {
+	const setProfile = (id: number) => {
 		//const profileToSet = profiles.find((p) => p.name === name);
 		//console.log("Perfil", profileToSet);
-		_setProfile(profiles.find((p) => p.name === name) || defaultProfile);
+		const profileToSet = profiles.find((p) => p.id === id) || defaultProfile;
+		_setProfile(profileToSet);
+		setLocalProfile(profileToSet);
 	};
 
-	const updateProfile = (profileName: string, newProfile: Profile) => {
+	const updateProfile = (profileId: number, newProfile: Profile) => {
 		const newProfiles = profiles?.map((p) => {
-			if (p.name === profileName) {
+			if (p.id === profileId) {
 				return { ...newProfile };
 			}
 			return p;
 		});
-		console.log("newProfiles", newProfiles);
 		setProfiles(newProfiles);
-		console.log("profile", newProfile);
-		setProfile(newProfile.name);
+		setProfile(newProfile.id);
 	};
 
 	const addProfile = (profile: Profile) => {
 		setProfiles([...profiles, profile]);
 	};
 
-	const deleteProfile = (name: string) => {
-		const newProfiles = profiles.filter((p) => p.name !== name);
+	const deleteProfile = (id: number) => {
+		const newProfiles = profiles.filter((p) => p.id !== id);
 		setProfiles(newProfiles);
-		setProfile(newProfiles[newProfiles.length - 1].name);
+		setProfile(newProfiles[newProfiles.length - 1].id);
 	};
+
+	useEffect(() => {
+		if (profile) {
+			setProfile(profile.id);
+		}
+	}, profiles);
 
 	useEffect(() => {
 		const tryGetProfiles = async () => {

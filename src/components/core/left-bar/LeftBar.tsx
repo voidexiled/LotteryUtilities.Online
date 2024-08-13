@@ -1,10 +1,8 @@
 import { DEFAULT_TOOLS } from "@/consts/ToolsConsts";
 import { BrushIcon, MoveIcon } from "lucide-react";
 import { ToggleTool } from "./ToggleTool";
+
 export const LeftBar = () => {
-
-
-
 	return (
 		<div className="sticky top-0 left-0 order-1 flex flex-row items-center gap-2 rounded-lg bg-base-200 p-3 text-xs lg:relative lg:flex-col">
 			<ToggleTool

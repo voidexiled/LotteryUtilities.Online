@@ -53,7 +53,9 @@ export const Header = () => {
 			p.name.includes("New Profile"),
 		).length;
 		const newName = `New Profile ${qtySameName + 1}`;
+		const nextProfileId = profiles[profiles.length - 1].id + 1;
 		const newProfile: Profile = {
+			id: nextProfileId,
 			name: newName,
 			pdfOptions: {
 				paperSize: "A4",

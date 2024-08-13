@@ -23,6 +23,7 @@ export type PDFOptionsProfile = {
 };
 
 export type Profile = {
+	id: number;
 	name: string;
 	pdfOptions: PDFOptionsProfile;
 	tableOptions: TableOptionsProfile;
@@ -52,12 +53,12 @@ export type ToolsContextType = {
 };
 
 export type ProfileContextType = {
-	setProfile: (name: string) => void;
+	setProfile: (id: number) => void;
 	profile: Profile;
-	updateProfile: (profileName: string, profile: Profile) => void;
+	updateProfile: (profileId: number, profile: Profile) => void;
 	profiles: Profile[];
 	addProfile: (profile: Profile) => void;
-	deleteProfile: (name: string) => void;
+	deleteProfile: (id: number) => void;
 	selectedComodin: FigurePosition | null;
 	setSelectedComodin: (figurePosition: FigurePosition | null) => void;
 	localProfile: Profile | null;

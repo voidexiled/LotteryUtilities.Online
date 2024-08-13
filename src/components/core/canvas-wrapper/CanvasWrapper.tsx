@@ -18,9 +18,6 @@ export const CanvasWrapper = ({
 
 	setCurrentTable,
 }: CanvasWrapperProps) => {
-	// const { currentTable } = useContext(TablesContext) as TablesContextType;
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		if (currentTable) {
 			if (!tables.includes(currentTable)) {
@@ -79,8 +76,6 @@ export const CanvasWrapper = ({
 		return duplicates;
 	}
 
-
-
 	const thereAreFiguresRepeated = () => {
 		if (!currentTable) {
 			return false;
@@ -91,13 +86,14 @@ export const CanvasWrapper = ({
 	return (
 		<div className="order-3 flex h-[calc(100vh-50px)] grow flex-col items-center justify-center rounded-lg lg:order-2 lg:h-full lg:px-[48px]">
 			<div className="flex h-[60px] w-full flex-row items-center justify-center">
-				<div className={cn("flex cursor-pointer flex-row items-center gap-3 opacity-0 transition-all", thereAreFiguresRepeated() && "opacity-100")}
+				<div
+					className={cn(
+						"flex cursor-pointer flex-row items-center gap-3 opacity-0 transition-all",
+						thereAreFiguresRepeated() && "opacity-100",
+					)}
 				>
-					<span className="">
-						Hay figuras repetidas!
-					</span>
+					<span className="">Hay figuras repetidas!</span>
 					<InfoIcon className="h-4 w-4 text-secondary" />
-
 				</div>
 			</div>
 			<div className="flex w-full grow flex-row items-center justify-between p-2">
